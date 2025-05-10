@@ -1,23 +1,31 @@
-"""
-URL configuration for campusvision project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 
+# Viewset'leri içe aktar
+from areas.views import AreaViewSet
+from reservations.views import ReservationViewSet
+from occupancy.views import OccupancyViewSet
+from feedback.views import FeedbackViewSet
+from lost_and_found.views import LostItemViewSet
+from issues.views import IssueReportViewSet
+from recommendation.views import RecommendationViewSet, RecommendAreaView  # 👈 burası önemli
+
+# Router ayarı
+router = routers.DefaultRouter()
+router.register(r'areas', AreaViewSet)
+router.register(r'reservations', ReservationViewSet)
+router.register(r'occupancy', OccupancyViewSet)
+router.register(r'feedback', FeedbackViewSet)
+router.register(r'lost', LostItemViewSet)
+router.register(r'issues', IssueReportViewSet)
+router.register(r'recommendation', RecommendationViewSet)
+
+# URLPattern'lere özel endpoint'i ekle
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
+    path('api/recommend-area/', RecommendAreaView.as_view(), name='recommend-area'),  # 👈 burası eklendi
+    path('', include('frontend.urls')),
+
 ]

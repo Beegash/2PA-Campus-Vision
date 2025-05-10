@@ -1,0 +1,12 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.dashboard, name='dashboard'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('quiet-zone/', views.quiet_zone_map, name='quiet_zone'),
+    path('real-time/', views.real_time_occupancy, name='real_time_occupancy'),
+    path('lost-and-found/', views.lost_and_found, name='lost_and_found'),
+    path('report-issue/', views.report_issue, name='report_issue'),  # ✔️ Doğru olan bu
+    path('reserve/', views.room_reservation, name='room_reservation'),
+]

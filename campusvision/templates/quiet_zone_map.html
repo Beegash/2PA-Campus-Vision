@@ -1,0 +1,495 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiet Zone Detection - CampusVision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover {
+            color: #3B82F6;
+        }
+        .nav-item.active {
+            color: #3B82F6;
+        }
+        .noise-level {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #10B981, #FBBF24, #EF4444);
+        }
+        .noise-indicator {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid #3B82F6;
+            transform: translateX(-50%);
+            top: -2px;
+        }
+        .building-selector {
+            scroll-behavior: smooth;
+        }
+        .building-item {
+            transition: all 0.2s ease;
+        }
+        .building-item.selected {
+            background-color: #3B82F6;
+            color: white;
+        }
+        .quiet-area-card {
+            transition: all 0.3s ease;
+        }
+        .quiet-area-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(52, 211, 153, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+            }
+        }
+        .map-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.6;
+            mix-blend-mode: multiply;
+        }
+        .noise-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .noise-dot.low {
+            background-color: rgba(16, 185, 129, 0.8);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+        }
+        .noise-dot.medium {
+            background-color: rgba(251, 191, 36, 0.8);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+        }
+        .noise-dot.high {
+            background-color: rgba(239, 68, 68, 0.8);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+        }
+        .floor-selector {
+            transition: all 0.3s ease;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.-right-1{right:-0.25rem}.-top-1{top:-0.25rem}.bottom-0{bottom:0px}.bottom-4{bottom:1rem}.left-0{left:0px}.right-0{right:0px}.right-4{right:1rem}.top-4{top:1rem}.-mx-1{margin-left:-0.25rem;margin-right:-0.25rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-20{margin-bottom:5rem}.mb-3{margin-bottom:0.75rem}.mb-6{margin-bottom:1.5rem}.ml-1{margin-left:0.25rem}.mr-1{margin-right:0.25rem}.mr-3{margin-right:0.75rem}.mt-1{margin-top:0.25rem}.mt-3{margin-top:0.75rem}.flex{display:flex}.inline-flex{display:inline-flex}.h-12{height:3rem}.h-2{height:0.5rem}.h-3{height:0.75rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-64{height:16rem}.h-8{height:2rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-2{width:0.5rem}.w-3{width:0.75rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.max-w-6xl{max-width:72rem}.max-w-md{max-width:28rem}.flex-shrink-0{flex-shrink:0}.cursor-pointer{cursor:pointer}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.whitespace-nowrap{white-space:nowrap}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-t{border-top-width:1px}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-400{--tw-bg-opacity:1;background-color:rgb(74 222 128 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(250 204 21 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-4{padding:1rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-2{padding-bottom:0.5rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-yellow-600{--tw-text-opacity:1;color:rgb(202 138 4 / var(--tw-text-opacity, 1))}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:bg-blue-200:hover{--tw-bg-opacity:1;background-color:rgb(191 219 254 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:h-80{height:20rem}}</style></head>
+<body class="bg-white min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-6xl">
+        <!-- Header -->
+        <header class="mb-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Quiet Zone Finder</h1>
+                    <p class="text-gray-600 mt-1">Find the perfect quiet spot to study</p>
+                </div>
+                <div class="bg-blue-50 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <!-- Current Noise Level -->
+        <div class="mb-6 bg-blue-50 rounded-xl p-4">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-lg font-medium text-gray-800">Current Campus Noise Level</h2>
+                <span class="text-sm font-medium text-blue-600">Updated 2 min ago</span>
+            </div>
+            <div class="relative mb-2">
+                <div class="noise-level"></div>
+                <div class="noise-indicator" style="left: 30%;"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500">
+                <span>Quiet</span>
+                <span>Moderate</span>
+                <span>Noisy</span>
+            </div>
+        </div>
+
+        <!-- Building Selector -->
+        <div class="mb-6">
+            <h2 class="text-lg font-medium text-gray-800 mb-3">Select Building</h2>
+            <div class="building-selector flex space-x-2 overflow-x-auto pb-2 -mx-1 px-1">
+                <div class="building-item selected flex-shrink-0 px-4 py-3 rounded-xl border border-blue-500 flex items-center justify-center cursor-pointer">
+                    <span class="whitespace-nowrap font-medium">All Buildings</span>
+                </div>
+                <div class="building-item flex-shrink-0 px-4 py-3 rounded-xl border border-gray-200 flex items-center justify-center cursor-pointer">
+                    <span class="whitespace-nowrap font-medium text-gray-700">Library</span>
+                </div>
+                <div class="building-item flex-shrink-0 px-4 py-3 rounded-xl border border-gray-200 flex items-center justify-center cursor-pointer">
+                    <span class="whitespace-nowrap font-medium text-gray-700">Science Center</span>
+                </div>
+                <div class="building-item flex-shrink-0 px-4 py-3 rounded-xl border border-gray-200 flex items-center justify-center cursor-pointer">
+                    <span class="whitespace-nowrap font-medium text-gray-700">Student Union</span>
+                </div>
+                <div class="building-item flex-shrink-0 px-4 py-3 rounded-xl border border-gray-200 flex items-center justify-center cursor-pointer">
+                    <span class="whitespace-nowrap font-medium text-gray-700">Arts Building</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campus Map with Noise Heatmap -->
+        <div class="mb-6">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-medium text-gray-800">Noise Heatmap</h2>
+                <div class="flex items-center space-x-2">
+                    <button id="zoomIn" class="p-1 bg-gray-100 rounded-md hover:bg-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                    </button>
+                    <button id="zoomOut" class="p-1 bg-gray-100 rounded-md hover:bg-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Floor Selector -->
+            <div class="flex justify-center mb-3">
+                <div class="inline-flex bg-gray-100 rounded-lg p-1">
+                    <button class="floor-selector px-4 py-1 rounded-md bg-white shadow-sm text-sm font-medium">
+                        Ground Floor
+                    </button>
+                    <button class="floor-selector px-4 py-1 rounded-md text-sm font-medium text-gray-700">
+                        1st Floor
+                    </button>
+                    <button class="floor-selector px-4 py-1 rounded-md text-sm font-medium text-gray-700">
+                        2nd Floor
+                    </button>
+                </div>
+            </div>
+            
+            <div class="map-container bg-gray-100 rounded-xl overflow-hidden h-64 md:h-80">
+                <!-- Campus Map SVG -->
+                <svg viewBox="0 0 800 500" class="w-full h-full">
+                    <!-- Campus Buildings -->
+                    <rect x="100" y="100" width="200" height="150" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="2"></rect>
+                    <text x="200" y="175" text-anchor="middle" font-size="14" fill="#4B5563">Library</text>
+                    
+                    <rect x="350" y="100" width="150" height="150" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="2"></rect>
+                    <text x="425" y="175" text-anchor="middle" font-size="14" fill="#4B5563">Science</text>
+                    
+                    <rect x="550" y="100" width="150" height="100" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="2"></rect>
+                    <text x="625" y="150" text-anchor="middle" font-size="14" fill="#4B5563">Arts</text>
+                    
+                    <rect x="100" y="300" width="250" height="100" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="2"></rect>
+                    <text x="225" y="350" text-anchor="middle" font-size="14" fill="#4B5563">Student Union</text>
+                    
+                    <rect x="400" y="300" width="300" height="100" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="2"></rect>
+                    <text x="550" y="350" text-anchor="middle" font-size="14" fill="#4B5563">Engineering</text>
+                    
+                    <!-- Paths -->
+                    <path d="M200 250 L200 300" stroke="#D1D5DB" stroke-width="4"></path>
+                    <path d="M350 175 L300 175" stroke="#D1D5DB" stroke-width="4"></path>
+                    <path d="M500 175 L550 150" stroke="#D1D5DB" stroke-width="4"></path>
+                    <path d="M425 250 L425 300" stroke="#D1D5DB" stroke-width="4"></path>
+                    <path d="M350 350 L400 350" stroke="#D1D5DB" stroke-width="4"></path>
+                    
+                    <!-- Green Areas -->
+                    <circle cx="275" cy="250" r="30" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1"></circle>
+                    <circle cx="500" cy="250" r="40" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1"></circle>
+                    <circle cx="650" cy="250" r="25" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1"></circle>
+                </svg>
+                
+                <!-- Noise Heatmap Overlay -->
+                <div class="map-overlay">
+                    <!-- Noise dots will be added dynamically -->
+                </div>
+                
+                <!-- Noise Dots -->
+                <div class="noise-dot low" style="top: 125px; left: 150px;"></div>
+                <div class="noise-dot low" style="top: 175px; left: 200px;"></div>
+                <div class="noise-dot low" style="top: 125px; left: 250px;"></div>
+                
+                <div class="noise-dot medium" style="top: 125px; left: 400px;"></div>
+                <div class="noise-dot medium" style="top: 175px; left: 450px;"></div>
+                
+                <div class="noise-dot high" style="top: 325px; left: 225px;"></div>
+                <div class="noise-dot high" style="top: 350px; left: 175px;"></div>
+                
+                <div class="noise-dot low" style="top: 125px; left: 600px;"></div>
+                
+                <div class="noise-dot medium" style="top: 325px; left: 500px;"></div>
+                <div class="noise-dot high" style="top: 350px; left: 600px;"></div>
+                
+                <!-- Current Location Marker -->
+                <div class="absolute bottom-4 right-4 bg-white p-2 rounded-lg shadow-md flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-blue-500 rounded-full pulse"></div>
+                    <span class="text-xs font-medium text-gray-700">Your Location</span>
+                </div>
+                
+                <!-- Legend -->
+                <div class="absolute top-4 right-4 bg-white p-2 rounded-lg shadow-md">
+                    <div class="text-xs font-medium text-gray-700 mb-1">Noise Level</div>
+                    <div class="flex items-center space-x-2 mb-1">
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="text-xs text-gray-600">Quiet</span>
+                    </div>
+                    <div class="flex items-center space-x-2 mb-1">
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <span class="text-xs text-gray-600">Moderate</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <span class="text-xs text-gray-600">Noisy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quietest Areas List -->
+        <div class="mb-20">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-medium text-gray-800">Quietest Areas Now</h2>
+                <button class="text-sm font-medium text-blue-600 flex items-center">
+                    <span>View All</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Quiet Area 1 -->
+                <div class="quiet-area-card bg-white border border-gray-200 rounded-xl p-4">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center">
+                            <div class="relative mr-3">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                </div>
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Library - Silent Study Area</h3>
+                                <p class="text-sm text-gray-600">2nd Floor • 15 seats available</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <div class="flex items-center mb-1">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium text-green-600">Very Quiet</span>
+                            </div>
+                            <span class="text-xs text-gray-500">300m away</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex justify-between items-center">
+                        <div class="flex items-center text-sm text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Open until 10:00 PM
+                        </div>
+                        <button class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-200 transition duration-300">
+                            Navigate
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quiet Area 2 -->
+                <div class="quiet-area-card bg-white border border-gray-200 rounded-xl p-4">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center">
+                            <div class="relative mr-3">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                                    </svg>
+                                </div>
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Science Center - Reading Room</h3>
+                                <p class="text-sm text-gray-600">1st Floor • 8 seats available</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <div class="flex items-center mb-1">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium text-green-600">Very Quiet</span>
+                            </div>
+                            <span class="text-xs text-gray-500">450m away</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex justify-between items-center">
+                        <div class="flex items-center text-sm text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Open until 8:00 PM
+                        </div>
+                        <button class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-200 transition duration-300">
+                            Navigate
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quiet Area 3 -->
+                <div class="quiet-area-card bg-white border border-gray-200 rounded-xl p-4">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center">
+                            <div class="relative mr-3">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                    </svg>
+                                </div>
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full border-2 border-white"></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Arts Building - Study Lounge</h3>
+                                <p class="text-sm text-gray-600">Ground Floor • 12 seats available</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <div class="flex items-center mb-1">
+                                <div class="w-2 h-2 bg-yellow-500 rounded-full mr-1"></div>
+                                <span class="text-sm font-medium text-yellow-600">Moderately Quiet</span>
+                            </div>
+                            <span class="text-xs text-gray-500">200m away</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex justify-between items-center">
+                        <div class="flex items-center text-sm text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Open until 9:00 PM
+                        </div>
+                        <button class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-200 transition duration-300">
+                            Navigate
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2">
+        <div class="flex justify-around items-center max-w-md mx-auto">
+            <div class="nav-item flex flex-col items-center p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                <span class="text-xs mt-1">Home</span>
+            </div>
+            <div class="nav-item flex flex-col items-center p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span class="text-xs mt-1">Reserve</span>
+            </div>
+            <div class="nav-item active flex flex-col items-center p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m0 0l-2.828 2.828m0 0a9 9 0 010-12.728m2.828 2.828a5 5 0 010 7.072M3 3l3.546 3.546m0 0a5 5 0 017.072 0m0 0l3.546-3.546M21 21l-3.546-3.546m0 0a5 5 0 01-7.072 0m0 0l-3.546 3.546"></path>
+                </svg>
+                <span class="text-xs mt-1">Quiet Zones</span>
+            </div>
+            <div class="nav-item flex flex-col items-center p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                <span class="text-xs mt-1">Profile</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Building selector functionality
+        document.querySelectorAll('.building-item').forEach(buildingItem => {
+            buildingItem.addEventListener('click', function() {
+                // Remove selected class from all building items
+                document.querySelectorAll('.building-item').forEach(item => {
+                    item.classList.remove('selected', 'bg-blue-500', 'text-white', 'border-blue-500');
+                    item.classList.add('border-gray-200');
+                    
+                    // Reset text color
+                    const textSpan = item.querySelector('span');
+                    if (textSpan) {
+                        textSpan.classList.remove('text-white');
+                        textSpan.classList.add('text-gray-700');
+                    }
+                });
+                
+                // Add selected class to clicked building item
+                this.classList.add('selected', 'bg-blue-500', 'border-blue-500');
+                this.classList.remove('border-gray-200');
+                
+                // Update text color
+                const textSpan = this.querySelector('span');
+                if (textSpan) {
+                    textSpan.classList.remove('text-gray-700');
+                    textSpan.classList.add('text-white');
+                }
+                
+                // Here you would filter the map and list based on the selected building
+                // For demo purposes, we'll just log the selection
+                console.log('Selected building:', this.querySelector('span').textContent);
+            });
+        });
+        
+        // Floor selector functionality
+        document.querySelectorAll('.floor-selector').forEach(floorButton => {
+            floorButton.addEventListener('click', function() {
+                // Remove styling from all floor buttons
+                document.querySelectorAll('.floor-selector').forEach(btn => {
+                    btn.classList.remove('bg-white', 'shadow-sm');
+                    btn.classList.add('text-gray-700');
+                });
+                
+                // Add styling to clicked button
+                this.classList.add('bg-white', 'shadow-sm');
+                this.classList.remove('text-gray-700');
+                
+                // Here you would update the map to show the selected floor
+                // For demo purposes, we'll just log the selection
+                console.log('Selected floor:', this.textContent.trim());
+            });
+        });
+        
+        // Zoom functionality
+        document.getElementById('zoomIn').addEventListener('click', function() {
+            // Implement zoom in functionality
+            console.log('Zoom in');
+        });
+        
+        document.getElementById('zoomOut').addEventListener('click', function() {
+            // Implement zoom out functionality
+            console.log('Zoom out');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d34e0f11d3ca20',t:'MTc0NjgxNTgxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+</body></html>

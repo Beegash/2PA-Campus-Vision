@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6vo43nvj3e6bd6iwn)l+ol%&rsx!!m&g^cr+g2&jcewih!h^a!"
+SECRET_KEY = "django-insecure-_et$!ye!k9l-13w)rc4s7)y148@+4kj1kjcdv$vp=mb+@972t0"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    'areas',
+    'feedback',
+    'occupancy',
+    'frontend',
+    'recommendation',
+    'reservations',
+    'lost_and_found',
+    'issues',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +64,7 @@ ROOT_URLCONF = "campusvision.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': [BASE_DIR / 'templates'],  # HTML dosyaları buradan okunur
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -120,3 +130,11 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',  # bu gerekli
+    ]
+}
