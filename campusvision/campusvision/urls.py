@@ -29,5 +29,6 @@ urlpatterns = [
     path('', include('frontend.urls')),
     path("reserve/", include("reservations.urls")),
     path('occupancy/', include('occupancy.urls')),
-
+    path('', include('users.urls')),
+    path('', include('reports.urls')),
 ]

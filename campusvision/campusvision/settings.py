@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'lost_and_found',
     'issues',
     'users',
+    'reports',
 ]
 
 MIDDLEWARE = [
