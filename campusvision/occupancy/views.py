@@ -10,6 +10,36 @@ from .models import OccupancyData
 from areas.models import Area
 from django.http import JsonResponse
 from .models import Room
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.utils import timezone
+from datetime import timedelta
+from .models import OccupancyData
+from areas.models import Area
+
+class RealTimeOccupancyAPIView(APIView):
+    def get(self, request):
+        now = timezone.now()
+        recent = now - timedelta(minutes=5)
+
+        response = []
+        for area in Area.objects.all():
+            recent_data = OccupancyData.objects.filter(area=area, timestamp__gte=recent).order_by('-timestamp').first()
+            person_count = recent_data.person_count if recent_data else 0
+            status = "available" if person_count < area.capacity else "occupied"
+
+            response.append({
+                "id": area.id,
+                "name": area.name,
+                "category": area.category,
+                "capacity": area.capacity,
+                "is_available": area.is_available,
+                "current_person_count": person_count,
+                "status": status,
+            })
+
+        return Response(response)
+
 
 def get_categories(request):
     categories = Room.objects.values_list('category', flat=True).distinct()

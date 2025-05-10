@@ -971,23 +971,45 @@
 
       <script>
          let allRooms = [];
-
-         const filterConfig = {
-            Library: { field: "building", value: "library" },
-            "Science Building": { field: "building", value: "science" },
-            Engineering: { field: "building", value: "engineering" },
-            "Study Rooms": { field: "category", value: "study" },
-            Math: { field: "category", value: "math" },
-            Physics: { field: "category", value: "physics" },
-            Arts: { field: "category", value: "arts" },
-            Computer: { field: "category", value: "computer" },
-         };
+         let categories = new Set();
 
          async function fetchRooms() {
             const response = await fetch("/occupancy/api/real-time/");
             const rooms = await response.json();
             allRooms = rooms;
+            extractCategories();
             applyFilters();
+         }
+
+         function extractCategories() {
+            categories.clear();
+            allRooms.forEach((room) => {
+               if (room.category) {
+                  categories.add(room.category.trim());
+               }
+            });
+
+            renderFilterButtons();
+         }
+
+         function renderFilterButtons() {
+            const container = document.querySelector(".filter-button")?.parentElement;
+            if (!container) return;
+
+            container.innerHTML = "";
+
+            const filters = ["All Rooms", "Available Now", ...Array.from(categories).sort()];
+            filters.forEach((label, index) => {
+               const btn = document.createElement("button");
+               btn.textContent = label;
+               btn.className = `filter-button px-3 py-2 text-sm font-medium rounded-lg ${index === 0 ? "active bg-blue-500 text-white" : "hover:bg-gray-200 bg-gray-100 text-gray-700"}`;
+               btn.addEventListener("click", function () {
+                  document.querySelectorAll(".filter-button").forEach((b) => b.classList.remove("active", "bg-blue-500", "text-white"));
+                  this.classList.add("active", "bg-blue-500", "text-white");
+                  applyFilters();
+               });
+               container.appendChild(btn);
+            });
          }
 
          function applyFilters() {
@@ -996,24 +1018,21 @@
 
             let filteredRooms = [...allRooms];
 
-            // Arama
+            // 🔍 Arama
             if (searchQuery) {
                filteredRooms = filteredRooms.filter((room) => room.name.toLowerCase().includes(searchQuery) || room.category.toLowerCase().includes(searchQuery));
             }
 
-            // Kategori veya durum filtresi
+            // 🔘 Etiket
             if (activeFilter && activeFilter !== "All Rooms") {
                if (activeFilter === "Available Now") {
                   filteredRooms = filteredRooms.filter((room) => room.status === "available");
-               } else if (filterConfig[activeFilter]) {
-                  const { field, value } = filterConfig[activeFilter];
-                  filteredRooms = filteredRooms.filter((room) => room[field] && room[field].toLowerCase().includes(value));
+               } else {
+                  filteredRooms = filteredRooms.filter((room) => room.category.toLowerCase().includes(activeFilter.toLowerCase()));
                }
             }
 
             renderRooms(filteredRooms);
-
-            // Sayacı güncelle
             const countAvailable = filteredRooms.filter((r) => r.status === "available").length;
             const countSpan = document.getElementById("availableCount");
             if (countSpan) countSpan.textContent = countAvailable;
@@ -1026,66 +1045,52 @@
             rooms.forEach((room) => {
                const statusClass = room.status === "available" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
                const statusDot = room.status === "available" ? "bg-green-400 pulse" : "bg-red-500";
-               const statusText = room.status.charAt(0).toUpperCase() + room.status.slice(1);
                const availableInfo =
                   room.status === "available" ? `Available • ${room.capacity - room.current_person_count} spot(s) left` : `Occupied • ${room.current_person_count} / ${room.capacity}`;
 
                const card = `
-            <div class="room-card bg-white border border-gray-200 rounded-xl p-4 flex">
-               <div class="mr-4 flex-shrink-0">
-                  <div class="relative">
-                     <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 font-bold text-sm">${room.name.split(" ")[0]}</div>
-                     <div class="absolute -top-1 -right-1 w-6 h-6 ${statusDot} rounded-full border-2 border-white status-indicator"></div>
-                  </div>
-               </div>
-               <div class="flex-grow">
-                  <div class="flex justify-between items-start">
-                     <div>
-                        <h3 class="font-semibold text-gray-800">${room.name}</h3>
-                        <p class="text-sm text-gray-600">${room.category} • ${room.capacity} People</p>
+                  <div class="room-card bg-white border border-gray-200 rounded-xl p-4 flex">
+                     <div class="mr-4 flex-shrink-0">
+                        <div class="relative">
+                           <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 font-bold text-sm">
+                              ${room.name.split(" ")[0]}
+                           </div>
+                           <div class="absolute -top-1 -right-1 w-6 h-6 ${statusDot} rounded-full border-2 border-white status-indicator"></div>
+                        </div>
                      </div>
-                     <div class="${statusClass} text-xs font-medium px-2.5 py-0.5 rounded-full">${statusText}</div>
-                  </div>
-                  <div class="mt-2 flex items-center justify-between">
-                     <div class="flex items-center text-sm text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        ${availableInfo}
+                     <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                           <div>
+                              <h3 class="font-semibold text-gray-800">${room.name}</h3>
+                              <p class="text-sm text-gray-600">${room.category} • ${room.capacity} People</p>
+                           </div>
+                           <div class="${statusClass} text-xs font-medium px-2.5 py-0.5 rounded-full">${room.status}</div>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between">
+                           <div class="flex items-center text-sm text-gray-500">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              ${availableInfo}
+                           </div>
+                           <button class="text-blue-600 text-sm font-medium hover:text-blue-800">
+                              ${room.status === "available" ? "Book Now" : "View Schedule"}
+                           </button>
+                        </div>
                      </div>
-                     <button class="text-blue-600 text-sm font-medium hover:text-blue-800">
-                        ${room.status === "available" ? "Book Now" : "View Schedule"}
-                     </button>
                   </div>
-               </div>
-            </div>
-         `;
+               `;
                container.innerHTML += card;
             });
          }
-
-         document.querySelectorAll(".filter-button").forEach((button) => {
-            button.addEventListener("click", function () {
-               document.querySelectorAll(".filter-button").forEach((btn) => {
-                  btn.classList.remove("active", "bg-blue-500", "text-white");
-                  btn.classList.add("bg-gray-100", "text-gray-700");
-               });
-
-               this.classList.remove("bg-gray-100", "text-gray-700");
-               this.classList.add("active", "bg-blue-500", "text-white");
-
-               applyFilters();
-            });
-         });
 
          window.addEventListener("DOMContentLoaded", () => {
             const input = document.querySelector("input[placeholder='Search for rooms...']");
             input.id = "roomSearchInput";
             input.addEventListener("input", applyFilters);
+            fetchRooms();
+            setInterval(fetchRooms, 10000);
          });
-
-         fetchRooms();
-         setInterval(fetchRooms, 10000);
       </script>
    </body>
 </html>
