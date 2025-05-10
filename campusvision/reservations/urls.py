@@ -14,5 +14,8 @@ urlpatterns = [
     path('make/', make_reservation, name='make_reservation'),
     path('unavailable/', get_unavailable_rooms, name='get_unavailable_rooms'),
     path('my/', views.my_reservations, name='my_reservations'),  # 🌟 yeni eklendi
+    path("cancel_reservation/", views.cancel_reservation, name="cancel_reservation"),
 
 ]
+
+urlpatterns += router.urls

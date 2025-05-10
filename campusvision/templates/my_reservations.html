@@ -1619,7 +1619,7 @@
                   <!-- Upcoming Reservations Section -->
                   <div id="upcomingReservations" class="mb-20">
                      {% for reservation in upcoming_reservations %}
-                     <div class="reservation-card slide-in bg-white rounded-xl border border-gray-200 mb-4 overflow-hidden">
+                     <div class="reservation-card slide-in bg-white ... overflow-hidden" data-reservation-id="{{ reservation.id }}">
                         <div class="p-5">
                            <div class="flex justify-between items-start mb-3">
                               <h3 class="font-semibold text-lg text-gray-800">{{ reservation.area.name }}</h3>
@@ -1647,55 +1647,16 @@
                                  <svg class="h-5 w-5 text-blue-500 mr-1" ...></svg>
                                  <span class="text-sm text-blue-600">Confirmed</span>
                               </div>
-                              <button class="cancel-btn text-sm font-medium text-red-600 hover:text-red-800 flex items-center">
-                                 <svg class="h-4 w-4 mr-1" ...></svg>
-                                 Cancel Reservation
-                              </button>
+                              <button class="cancel-btn text-sm font-medium text-red-600 hover:text-red-800 flex items-center"
+                              data-id="{{ reservation.id }}">
+                         <svg class="h-4 w-4 mr-1" ...></svg>
+                         Cancel Reservation
+                      </button>
                            </div>
                         </div>
                      </div>
                      {% empty %}
                      <p class="text-gray-600">No upcoming reservations found.</p>
-                     {% endfor %}
-                  </div>
-
-                  <!-- Past Reservations -->
-                  <div id="pastReservations" class="mb-20 hidden">
-                     {% for reservation in past %}
-                     <div class="reservation-card slide-in bg-white rounded-xl border border-gray-200 mb-4 overflow-hidden">
-                        <div class="p-5">
-                           <div class="flex justify-between items-start mb-3">
-                              <h3 class="font-semibold text-lg text-gray-800">{{ reservation.area.name }}</h3>
-                              <div class="flex items-center">
-                                 <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Completed</span>
-                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">{{ reservation.area.type }}</span>
-                              </div>
-                           </div>
-                           <div class="flex items-start mb-3">
-                              <svg class="h-5 w-5 text-gray-500 mr-2 mt-0.5" ...></svg>
-                              <div>
-                                 <p class="text-gray-700 font-medium">{{ reservation.start_time|date:"F d, Y" }}</p>
-                                 <p class="text-gray-600 text-sm">{{ reservation.start_time|time:"H:i" }} - {{ reservation.end_time|time:"H:i" }}</p>
-                              </div>
-                           </div>
-                           <div class="flex items-start mb-4">
-                              <svg class="h-5 w-5 text-gray-500 mr-2 mt-0.5" ...></svg>
-                              <p class="text-gray-600">{{ reservation.area.location }}</p>
-                           </div>
-                           <div class="flex justify-between items-center">
-                              <div class="flex items-center">
-                                 <svg class="h-5 w-5 text-green-500 mr-1" ...></svg>
-                                 <span class="text-sm text-green-600">Completed</span>
-                              </div>
-                              <button class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
-                                 <svg class="h-4 w-4 mr-1" ...></svg>
-                                 Book Again
-                              </button>
-                           </div>
-                        </div>
-                     </div>
-                     {% empty %}
-                     <p class="text-gray-600">No past reservations found.</p>
                      {% endfor %}
                   </div>
 
@@ -1906,209 +1867,52 @@
          </html>
          <!-- Past Reservations Section (Hidden by default) -->
          <div id="pastReservations" class="mb-20 hidden">
-            <!-- Past Reservation Card 1 -->
+            {% for reservation in past_reservations %}
             <div class="reservation-card slide-in bg-white rounded-xl border border-gray-200 mb-4 overflow-hidden">
                <div class="p-5">
                   <div class="flex justify-between items-start mb-3">
-                     <h3 class="font-semibold text-lg text-gray-800">Library Room 101</h3>
+                     <h3 class="font-semibold text-lg text-gray-800">{{ reservation.area.name }}</h3>
                      <div class="flex items-center">
-                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Completed</span>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Quiet</span>
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">
+                           {% if reservation.is_cancelled %} Cancelled {% else %} Completed {% endif %}
+                        </span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full"> {{ reservation.area.type }} </span>
                      </div>
                   </div>
 
                   <div class="flex items-start mb-3">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                     </svg>
+                     <svg class="h-5 w-5 text-gray-500 mr-2 mt-0.5" ...></svg>
                      <div>
-                        <p class="text-gray-700 font-medium">May 10, 2025</p>
-                        <p class="text-gray-600 text-sm">1:00 PM - 3:00 PM (2 hours)</p>
+                        <p class="text-gray-700 font-medium">{{ reservation.start_time|date:"F d, Y" }}</p>
+                        <p class="text-gray-600 text-sm">{{ reservation.start_time|time:"H:i" }} - {{ reservation.end_time|time:"H:i" }}</p>
                      </div>
                   </div>
 
                   <div class="flex items-start mb-4">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                     </svg>
-                     <p class="text-gray-600">Main Library, 1st Floor</p>
+                     <svg class="h-5 w-5 text-gray-500 mr-2 mt-0.5" ...></svg>
+                     <p class="text-gray-600">{{ reservation.area.location }}</p>
                   </div>
 
                   <div class="flex justify-between items-center">
                      <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span class="text-sm text-green-600">Completed</span>
-                     </div>
-                     <button class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                           ></path>
-                        </svg>
-                        Book Again
-                     </button>
-                  </div>
-               </div>
-            </div>
-
-            <!-- Past Reservation Card 2 -->
-            <div class="reservation-card slide-in bg-white rounded-xl border border-gray-200 mb-4 overflow-hidden">
-               <div class="p-5">
-                  <div class="flex justify-between items-start mb-3">
-                     <h3 class="font-semibold text-lg text-gray-800">Arts Center Studio</h3>
-                     <div class="flex items-center">
-                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Cancelled</span>
-                        <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Group</span>
-                     </div>
-                  </div>
-
-                  <div class="flex items-start mb-3">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                     </svg>
-                     <div>
-                        <p class="text-gray-700 font-medium">May 8, 2025</p>
-                        <p class="text-gray-600 text-sm">4:00 PM - 6:00 PM (2 hours)</p>
-                     </div>
-                  </div>
-
-                  <div class="flex items-start mb-4">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                     </svg>
-                     <p class="text-gray-600">Arts Center, 2nd Floor</p>
-                  </div>
-
-                  <div class="flex justify-between items-center">
-                     <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+                        {% if reservation.is_cancelled %}
+                        <svg class="h-5 w-5 text-red-500 mr-1" ...></svg>
                         <span class="text-sm text-red-600">Cancelled by you</span>
-                     </div>
-                     <button class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                           ></path>
-                        </svg>
-                        Book Again
-                     </button>
-                  </div>
-               </div>
-            </div>
-
-            <!-- Past Reservation Card 3 -->
-            <div class="reservation-card slide-in bg-white rounded-xl border border-gray-200 mb-4 overflow-hidden">
-               <div class="p-5">
-                  <div class="flex justify-between items-start mb-3">
-                     <h3 class="font-semibold text-lg text-gray-800">Science Building Lab 203</h3>
-                     <div class="flex items-center">
-                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Completed</span>
-                        <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Mixed</span>
-                     </div>
-                  </div>
-
-                  <div class="flex items-start mb-3">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                     </svg>
-                     <div>
-                        <p class="text-gray-700 font-medium">May 5, 2025</p>
-                        <p class="text-gray-600 text-sm">10:00 AM - 12:00 PM (2 hours)</p>
-                     </div>
-                  </div>
-
-                  <div class="flex items-start mb-4">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                     </svg>
-                     <p class="text-gray-600">Science Building, 2nd Floor</p>
-                  </div>
-
-                  <div class="flex justify-between items-center">
-                     <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
+                        {% else %}
+                        <svg class="h-5 w-5 text-green-500 mr-1" ...></svg>
                         <span class="text-sm text-green-600">Completed</span>
+                        {% endif %}
                      </div>
                      <button class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                           ></path>
-                        </svg>
+                        <svg class="h-4 w-4 mr-1" ...></svg>
                         Book Again
                      </button>
                   </div>
                </div>
             </div>
-
-            <!-- Past Reservation Card 4 -->
-            <div class="reservation-card slide-in bg-white rounded-xl border border-gray-200 mb-4 overflow-hidden">
-               <div class="p-5">
-                  <div class="flex justify-between items-start mb-3">
-                     <h3 class="font-semibold text-lg text-gray-800">Media Center Editing Suite</h3>
-                     <div class="flex items-center">
-                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Completed</span>
-                        <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Group</span>
-                     </div>
-                  </div>
-
-                  <div class="flex items-start mb-3">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                     </svg>
-                     <div>
-                        <p class="text-gray-700 font-medium">May 2, 2025</p>
-                        <p class="text-gray-600 text-sm">3:00 PM - 6:00 PM (3 hours)</p>
-                     </div>
-                  </div>
-
-                  <div class="flex items-start mb-4">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                     </svg>
-                     <p class="text-gray-600">Media Center, Basement Level</p>
-                  </div>
-
-                  <div class="flex justify-between items-center">
-                     <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span class="text-sm text-green-600">Completed</span>
-                     </div>
-                     <button class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                           ></path>
-                        </svg>
-                        Book Again
-                     </button>
-                  </div>
-               </div>
-            </div>
+            {% empty %}
+            <p class="text-gray-600 text-center">No past reservations found.</p>
+            {% endfor %}
          </div>
 
          <!-- Empty State (Hidden by default) -->

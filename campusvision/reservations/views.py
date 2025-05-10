@@ -17,7 +17,11 @@ from areas.models import Area
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import Reservation
-
+from django.views.decorators.http import require_POST
+from django.http import HttpResponseForbidden
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
@@ -95,3 +99,15 @@ def my_reservations(request):
         'upcoming_reservations': upcoming,
         'past_reservations': past,
     })
+
+@csrf_exempt
+@require_POST
+@login_required
+def cancel_reservation(request):
+    reservation_id = request.POST.get("reservation_id")
+    try:
+        reservation = Reservation.objects.get(id=reservation_id, user=request.user)
+        reservation.delete()
+        return JsonResponse({"success": True})
+    except Reservation.DoesNotExist:
+        return JsonResponse({"error": "Reservation not found or not yours"}, status=404)
