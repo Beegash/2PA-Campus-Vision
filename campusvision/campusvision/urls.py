@@ -27,5 +27,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/recommend-area/', RecommendAreaView.as_view(), name='recommend-area'),  # 👈 burası eklendi
     path('', include('frontend.urls')),
+    path("reserve/", include("reservations.urls")),
 
 ]

@@ -1000,7 +1000,18 @@
 
          <!-- Reservation Button -->
          <div class="fixed bottom-16 left-0 right-0 px-4 py-4 bg-white border-t border-gray-200">
-            <button id="reserveButton" class="w-full py-3 bg-gray-300 text-gray-500 font-medium rounded-lg transition duration-300" disabled="">Reserve Room</button>
+            <form method="POST" action="{% url 'make_reservation' %}" id="reservationForm">
+               {% csrf_token %}
+
+               <!-- Gizli inputlar (JS buraya değer atayacak) -->
+               <input type="hidden" name="area_id" id="area_id_input" />
+               <input type="hidden" name="date" id="date_input" />
+               <input type="hidden" name="start_time" id="start_time_input" />
+               <input type="hidden" name="duration" id="duration_input" />
+
+               <!-- Buton -->
+               <button id="reserveButton" type="button" class="w-full py-3 bg-gray-300 text-gray-500 font-medium rounded-lg transition duration-300" disabled>Reserve Room</button>
+            </form>
          </div>
       </div>
 
@@ -1096,193 +1107,163 @@
          let selectedRoom = null;
          let selectedDuration = "1 hour";
 
-         // Function to select a room
          function selectRoom(roomId) {
-            // Clear previous selection
             if (selectedRoom) {
                document.getElementById("room-" + selectedRoom).innerHTML = "";
                document.getElementById("room-" + selectedRoom).classList.remove("bg-blue-500");
             }
 
-            // Set new selection
             selectedRoom = roomId;
             document.getElementById("room-" + roomId).innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+               </svg>
             `;
             document.getElementById("room-" + roomId).classList.add("bg-blue-500");
 
-            // Enable reserve button
             const reserveButton = document.getElementById("reserveButton");
             reserveButton.classList.remove("bg-gray-300", "text-gray-500");
             reserveButton.classList.add("bg-blue-600", "text-white", "hover:bg-blue-700");
             reserveButton.disabled = false;
-
-            // Add click event to reserve button
-            reserveButton.onclick = showConfirmation;
          }
 
-         // Function to show confirmation modal
          function showConfirmation() {
             const modal = document.getElementById("confirmationModal");
+            const selectedTime = document.querySelector(".time-slot.selected")?.textContent.trim();
+            if (!selectedTime) return alert("Please select a time.");
 
-            // Set room details in confirmation
-            let roomName, roomType;
-            switch (selectedRoom) {
-               case "lib101":
-                  roomName = "Library Room 101";
-                  roomType = "Small Study Room • 4 People";
-                  break;
-               case "lib201":
-                  roomName = "Library Room 201";
-                  roomType = "Group Study Room • 12 People";
-                  break;
-               case "sci201":
-                  roomName = "Science Lab 201";
-                  roomType = "Chemistry Lab • 24 People";
-                  break;
-               case "art101":
-                  roomName = "Arts Studio 101";
-                  roomType = "Art Studio • 15 People";
-                  break;
-               default:
-                  roomName = "Selected Room";
-                  roomType = "Room Details";
-            }
-
-            document.getElementById("confirmRoomName").textContent = roomName;
-            document.getElementById("confirmRoomType").textContent = roomType;
-
-            // Update time based on selected duration
-            const selectedTime = document.querySelector(".time-slot.selected").textContent.trim();
-            let endTime;
-
-            if (selectedDuration === "1 hour") {
-               if (selectedTime === "11:00 AM") {
-                  endTime = "12:00 PM";
-               } else if (selectedTime === "12:00 PM") {
-                  endTime = "1:00 PM";
-               } else {
-                  // Simple logic for other times
-                  const timeNum = parseInt(selectedTime);
-                  if (selectedTime.includes("AM")) {
-                     endTime = timeNum + 1 + ":00 AM";
-                  } else {
-                     endTime = timeNum + 1 + ":00 PM";
-                  }
-               }
-            } else if (selectedDuration === "2 hours") {
-               if (selectedTime === "11:00 AM") {
-                  endTime = "1:00 PM";
-               } else if (selectedTime === "12:00 PM") {
-                  endTime = "2:00 PM";
-               } else {
-                  // Simple logic for other times
-                  const timeNum = parseInt(selectedTime);
-                  if (selectedTime.includes("AM") && timeNum + 2 < 12) {
-                     endTime = timeNum + 2 + ":00 AM";
-                  } else if (selectedTime.includes("AM")) {
-                     endTime = timeNum + 2 - 12 + ":00 PM";
-                  } else {
-                     endTime = timeNum + 2 + ":00 PM";
-                  }
-               }
-            } else {
-               // 3+ hours
-               if (selectedTime === "11:00 AM") {
-                  endTime = "2:00 PM";
-               } else if (selectedTime === "12:00 PM") {
-                  endTime = "3:00 PM";
-               } else {
-                  // Simple logic for other times
-                  const timeNum = parseInt(selectedTime);
-                  if (selectedTime.includes("AM") && timeNum + 3 < 12) {
-                     endTime = timeNum + 3 + ":00 AM";
-                  } else if (selectedTime.includes("AM")) {
-                     endTime = timeNum + 3 - 12 + ":00 PM";
-                  } else {
-                     endTime = timeNum + 3 + ":00 PM";
-                  }
-               }
-            }
-
+            let endTime = calculateEndTime(selectedTime, selectedDuration);
+            document.getElementById("confirmRoomName").textContent = selectedRoom;
+            document.getElementById("confirmRoomType").textContent = selectedDuration + " booking";
             document.getElementById("confirmTime").textContent = selectedTime + " - " + endTime;
-
-            // Show the modal
             modal.classList.remove("hidden");
          }
 
-         // Function to close confirmation modal
+         function calculateEndTime(start, duration) {
+            const [time, meridiem] = start.split(" ");
+            let [hour] = time.split(":").map(Number);
+            let add = duration === "2 hours" ? 2 : duration === "3+ hours" ? 3 : 1;
+            hour += add;
+            if (hour > 12) hour -= 12;
+            return `${hour}:00 ${meridiem}`;
+         }
+
          function closeConfirmation() {
-            const modal = document.getElementById("confirmationModal");
-            modal.classList.add("hidden");
+            document.getElementById("confirmationModal").classList.add("hidden");
          }
 
-         // Function to view reservations (placeholder)
-         function viewReservations() {
-            closeConfirmation();
-            // This would navigate to a reservations page in a real app
-            alert("This would navigate to your reservations page");
-         }
+         document.querySelectorAll(".date-item").forEach((item) => {
+            item.addEventListener("click", () => {
+               document.querySelectorAll(".date-item").forEach((i) => i.classList.remove("selected", "bg-blue-500", "text-white"));
+               item.classList.add("selected", "bg-blue-500", "text-white");
 
-         // Date selector functionality
-         document.querySelectorAll(".date-item").forEach((dateItem) => {
-            dateItem.addEventListener("click", function () {
-               // Remove selected class from all date items
-               document.querySelectorAll(".date-item").forEach((item) => {
-                  item.classList.remove("selected", "bg-blue-500", "text-white");
-                  item.classList.add("border-gray-200");
-               });
-
-               // Add selected class to clicked date item
-               this.classList.add("selected", "bg-blue-500", "text-white");
-               this.classList.remove("border-gray-200");
+               fetchUnavailableRooms(); // ✅ Yeni eklenen kısım
             });
          });
 
-         // Time slot functionality
-         document.querySelectorAll(".time-slot").forEach((timeSlot) => {
-            timeSlot.addEventListener("click", function () {
-               if (!this.classList.contains("time-slot-disabled")) {
-                  // Remove selected class from all time slots
-                  document.querySelectorAll(".time-slot").forEach((slot) => {
-                     slot.classList.remove("selected", "bg-blue-500", "text-white", "border-blue-500");
-                     slot.classList.add("border-gray-200");
-                  });
+         function getMonthNumber(monthName) {
+            const months = {
+               Jan: "01",
+               Feb: "02",
+               Mar: "03",
+               Apr: "04",
+               May: "05",
+               Jun: "06",
+               Jul: "07",
+               Aug: "08",
+               Sep: "09",
+               Oct: "10",
+               Nov: "11",
+               Dec: "12",
+            };
+            return months[monthName];
+         }
 
-                  // Add selected class to clicked time slot
-                  this.classList.add("selected", "bg-blue-500", "text-white", "border-blue-500");
-                  this.classList.remove("border-gray-200");
+         document.querySelectorAll(".time-slot").forEach((slot) => {
+            slot.addEventListener("click", () => {
+               if (!slot.classList.contains("time-slot-disabled")) {
+                  document.querySelectorAll(".time-slot").forEach((s) => s.classList.remove("selected", "bg-blue-500", "text-white", "border-blue-500"));
+                  slot.classList.add("selected", "bg-blue-500", "text-white", "border-blue-500");
+
+                  fetchUnavailableRooms(); // ✅ Yeni eklenen kısım
                }
             });
          });
 
-         // Duration button functionality
          document.querySelectorAll(".duration-button").forEach((button) => {
-            button.addEventListener("click", function () {
-               // Remove selected class from all duration buttons
-               document.querySelectorAll(".duration-button").forEach((btn) => {
-                  btn.classList.remove("selected", "bg-blue-500", "text-white");
-                  btn.classList.add("bg-gray-100", "text-gray-800");
-               });
+            button.addEventListener("click", () => {
+               document.querySelectorAll(".duration-button").forEach((b) => b.classList.remove("selected", "bg-blue-500", "text-white"));
+               button.classList.add("selected", "bg-blue-500", "text-white");
+               selectedDuration = button.textContent.trim();
 
-               // Add selected class to clicked button
-               this.classList.add("selected", "bg-blue-500", "text-white");
-               this.classList.remove("bg-gray-100", "text-gray-800");
-
-               // Store the selected duration
-               selectedDuration = this.textContent.trim();
+               fetchUnavailableRooms(); // ✅ Yeni eklenen kısım
             });
          });
 
-         // Close modal when clicking outside
          window.onclick = function (event) {
             const modal = document.getElementById("confirmationModal");
-            if (event.target === modal) {
-               closeConfirmation();
-            }
+            if (event.target === modal) closeConfirmation();
          };
+
+         document.getElementById("reserveButton").onclick = function () {
+            if (!selectedRoom) return alert("Please select a room.");
+
+            const selectedDate = document.querySelector(".date-item.selected .text-lg")?.textContent.trim();
+            const selectedTime = document.querySelector(".time-slot.selected")?.textContent.trim();
+
+            if (!selectedDate || !selectedTime) return alert("Select date and time.");
+
+            document.getElementById("area_id_input").value = selectedRoom.replace("room", "");
+            document.getElementById("date_input").value = selectedDate;
+            document.getElementById("start_time_input").value = selectedTime;
+            document.getElementById("duration_input").value = selectedDuration;
+
+            document.getElementById("reservationForm").submit();
+         };
+
+         async function fetchUnavailableRooms() {
+            const dateElement = document.querySelector(".date-item.selected");
+            const time = document.querySelector(".time-slot.selected")?.textContent.trim();
+            const durationText = selectedDuration.trim().split(" ")[0]; // "1 hour" → "1"
+
+            if (!dateElement || !time) return;
+
+            const day = dateElement.querySelector(".text-lg")?.textContent.trim();
+            const month = dateElement.querySelector(".text-sm")?.textContent.trim();
+
+            if (!day || !month) return;
+
+            const formattedDate = `2025-${getMonthNumber(month)}-${day.padStart(2, "0")}`;
+
+            try {
+               const response = await fetch(`/reserve/unavailable/?date=${formattedDate}&start_time=${convertTo24Hr(time)}&duration=${durationText}`);
+               const data = await response.json();
+
+               document.querySelectorAll(".room-card").forEach((card) => {
+                  const roomId = card.getAttribute("onclick").match(/'(.*?)'/)[1];
+                  const element = document.getElementById("room-" + roomId);
+
+                  if (data.unavailable.includes(parseInt(roomId.replace("room", "")))) {
+                     card.classList.add("opacity-50", "pointer-events-none");
+                     element.innerHTML = "❌";
+                  } else {
+                     card.classList.remove("opacity-50", "pointer-events-none");
+                     element.innerHTML = "";
+                  }
+               });
+            } catch (err) {
+               console.error("Fetch error:", err);
+            }
+         }
+         
+         function convertTo24Hr(time) {
+            const [hourMin, meridiem] = time.split(" ");
+            let [hour] = hourMin.split(":");
+            hour = parseInt(hour);
+            if (meridiem === "PM" && hour !== 12) hour += 12;
+            if (meridiem === "AM" && hour === 12) hour = 0;
+            return `${hour.toString().padStart(2, "0")}:00`;
+         }
       </script>
    </body>
 </html>

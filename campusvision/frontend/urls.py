@@ -7,6 +7,7 @@ urlpatterns = [
     path('quiet-zone/', views.quiet_zone_map, name='quiet_zone'),
     path('real-time/', views.real_time_occupancy, name='real_time_occupancy'),
     path('lost-and-found/', views.lost_and_found, name='lost_and_found'),
-    path('report-issue/', views.report_issue, name='report_issue'),  # ✔️ Doğru olan bu
+    path('report-issue/', views.report_issue, name='report_issue'),
     path('reserve/', views.room_reservation, name='room_reservation'),
+    path('make-reservation/', views.make_reservation, name='make_reservation'),  # ✅ Bu satırı ekledik
 ]
