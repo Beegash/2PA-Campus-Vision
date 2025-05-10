@@ -963,8 +963,7 @@
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-               <button class="py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300">Book Now</button>
-               <button class="py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition duration-300">View Schedule</button>
+               <button class="py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300" onclick="window.location.href='/reserve/'">Book Now</button>
             </div>
          </div>
       </div>
@@ -974,7 +973,7 @@
          let categories = new Set();
 
          async function fetchRooms() {
-            const response = await fetch("/occupancy/api/real-time/");
+            const response = await fetch("/occupancy/real-time-json/");
             const rooms = await response.json();
             allRooms = rooms;
             extractCategories();
@@ -1002,10 +1001,12 @@
             filters.forEach((label, index) => {
                const btn = document.createElement("button");
                btn.textContent = label;
-               btn.className = `filter-button px-3 py-2 text-sm font-medium rounded-lg ${index === 0 ? "active bg-blue-500 text-white" : "hover:bg-gray-200 bg-gray-100 text-gray-700"}`;
+               btn.className = `filter-button px-3 py-2 text-sm font-medium rounded-lg ${label === "All Rooms" ? "active bg-blue-500 text-white" : "hover:bg-gray-200 bg-gray-100 text-gray-700"}`;
                btn.addEventListener("click", function () {
                   document.querySelectorAll(".filter-button").forEach((b) => b.classList.remove("active", "bg-blue-500", "text-white"));
                   this.classList.add("active", "bg-blue-500", "text-white");
+                  this.classList.remove("bg-gray-100", "text-gray-700");
+
                   applyFilters();
                });
                container.appendChild(btn);
@@ -1024,15 +1025,16 @@
             }
 
             // 🔘 Etiket
-            if (activeFilter && activeFilter !== "All Rooms") {
+            if (activeFilter) {
                if (activeFilter === "Available Now") {
                   filteredRooms = filteredRooms.filter((room) => room.status === "available");
-               } else {
+               } else if (activeFilter !== "All Rooms") {
                   filteredRooms = filteredRooms.filter((room) => room.category.toLowerCase().includes(activeFilter.toLowerCase()));
                }
             }
 
             renderRooms(filteredRooms);
+
             const countAvailable = filteredRooms.filter((r) => r.status === "available").length;
             const countSpan = document.getElementById("availableCount");
             if (countSpan) countSpan.textContent = countAvailable;
@@ -1066,17 +1068,22 @@
                            </div>
                            <div class="${statusClass} text-xs font-medium px-2.5 py-0.5 rounded-full">${room.status}</div>
                         </div>
-                        <div class="mt-2 flex items-center justify-between">
-                           <div class="flex items-center text-sm text-gray-500">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                              ${availableInfo}
+                           <div class="mt-2 flex items-center justify-between">
+                              <div class="flex items-center text-sm text-gray-500">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                 </svg>
+                                 ${availableInfo}
+                              </div>
+                              ${
+                                 room.status === "available"
+                                    ? `
+                              <a href="/reserve/" class="text-blue-600 text-sm font-medium hover:text-blue-800">
+                                 Book Now
+                              </a>`
+                                    : ""
+                              }
                            </div>
-                           <button class="text-blue-600 text-sm font-medium hover:text-blue-800">
-                              ${room.status === "available" ? "Book Now" : "View Schedule"}
-                           </button>
-                        </div>
                      </div>
                   </div>
                `;
@@ -1092,5 +1099,7 @@
             setInterval(fetchRooms, 10000);
          });
       </script>
+      <!-- Bottom Navigation Bar -->
+      {% include "partials/bottom_nav.html" with active="home" %}
    </body>
 </html>
