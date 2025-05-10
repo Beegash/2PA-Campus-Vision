@@ -12,22 +12,27 @@ from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.dateparse import parse_datetime
 from django.views.decorators.http import require_GET, require_POST
+from django.utils.timezone import make_aware
+
 
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
     renderer_classes = [JSONRenderer]
 
-@login_required
+def reserve_page(request):
+    return render(request, 'room_reservation.html')
+
 def make_reservation(request):
     if request.method == "POST":
         area_id = request.POST.get("area_id")
-        date = request.POST.get("date")         # örn: "16 May"
-        start_time = request.POST.get("start_time")  # örn: "10:00 AM"
-        duration = request.POST.get("duration")      # örn: "1 hour"
+        date = request.POST.get("date")              # "2025-05-18"
+        start_time = request.POST.get("start_time")  # "10:00 AM"
+        duration = request.POST.get("duration")      # "1 hour", "2 hours", etc.
 
         try:
-            start_dt = datetime.strptime(f"{date} {start_time}", "%d %b %I:%M %p")
+            start_dt = make_aware(datetime.strptime(f"{date} {start_time}", "%Y-%m-%d %I:%M %p"))
+
             if duration == "1 hour":
                 end_dt = start_dt + timedelta(hours=1)
             elif duration == "2 hours":
@@ -37,14 +42,28 @@ def make_reservation(request):
 
             area = Area.objects.get(id=area_id)
 
+            # ÇAKIŞMA KONTROLÜ
+            overlap = Reservation.objects.filter(
+                area=area,
+                start_time__lt=end_dt,
+                end_time__gt=start_dt,
+                is_cancelled=False
+            ).exists()
+
+            if overlap:
+                messages.error(request, "This room is already reserved in the selected time slot.")
+                return redirect("room_reservation")
+
             Reservation.objects.create(
                 user=request.user,
                 area=area,
                 start_time=start_dt,
                 end_time=end_dt
             )
+
             messages.success(request, "Room successfully reserved! 🎉")
             return redirect("room_reservation")
+
         except Exception as e:
             messages.error(request, f"Reservation failed: {str(e)}")
 
@@ -52,17 +71,20 @@ def make_reservation(request):
 
 @require_GET
 def get_unavailable_rooms(request):
+    from django.utils.timezone import make_aware
+
     date = request.GET.get("date")
     start_time = request.GET.get("start_time")
     duration = int(request.GET.get("duration", 1))
 
     try:
-        full_start = parse_datetime(f"{date}T{start_time}")
+        full_start = make_aware(datetime.strptime(f"{date} {start_time}", "%Y-%m-%d %H:%M"))
         full_end = full_start + timedelta(hours=duration)
 
         reservations = Reservation.objects.filter(
             start_time__lt=full_end,
-            end_time__gt=full_start
+            end_time__gt=full_start,
+            is_cancelled=False
         )
 
         busy_area_ids = reservations.values_list("area_id", flat=True)
@@ -71,7 +93,7 @@ def get_unavailable_rooms(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
 
-@login_required
+
 def my_reservations(request):
     now = timezone.now()
     upcoming = Reservation.objects.filter(user=request.user, start_time__gte=now).order_by('start_time')
@@ -83,7 +105,6 @@ def my_reservations(request):
 
 @csrf_exempt
 @require_POST
-@login_required
 def cancel_reservation(request):
     reservation_id = request.POST.get("reservation_id")
     try:

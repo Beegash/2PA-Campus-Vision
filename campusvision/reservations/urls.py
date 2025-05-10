@@ -1,21 +1,23 @@
-from django.urls import path
-from .views import make_reservation, get_unavailable_rooms
-from . import views
-from django.urls import path
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ReservationViewSet
-from . import views  # ✅ Burası eksikti
+
+from .views import (
+    ReservationViewSet,
+    make_reservation,
+    get_unavailable_rooms,
+    my_reservations,
+    cancel_reservation,
+    reserve_page,  # bu artık var
+)
 
 router = DefaultRouter()
-router.register(r'', ReservationViewSet, basename='reservation')
-
+router.register(r'api', ReservationViewSet, basename='reservation')
 
 urlpatterns = [
+    path('', reserve_page, name='room_reservation'),  # kullanıcı sayfayı açar
     path('make/', make_reservation, name='make_reservation'),
     path('unavailable/', get_unavailable_rooms, name='get_unavailable_rooms'),
-    path('my/', views.my_reservations, name='my_reservations'),  # 🌟 yeni eklendi
-    path("cancel_reservation/", views.cancel_reservation, name="cancel_reservation"),
-
+    path('my/', my_reservations, name='my_reservations'),
+    path('cancel/', cancel_reservation, name='cancel_reservation'),
+    path('', include(router.urls)),
 ]
-
-urlpatterns += router.urls
