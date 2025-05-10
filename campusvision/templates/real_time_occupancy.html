@@ -1,160 +1,886 @@
-<html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Occupancy Status - CampusVision</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .room-card {
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Room Occupancy Status - CampusVision</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+      <style>
+         body {
+            font-family: "Inter", sans-serif;
+         }
+         .room-card {
             transition: all 0.3s ease;
-        }
-        .room-card:hover {
+         }
+         .room-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .nav-item {
+         }
+         .nav-item {
             transition: all 0.2s ease;
-        }
-        .nav-item:hover {
-            color: #3B82F6;
-        }
-        .nav-item.active {
-            color: #3B82F6;
-        }
-        .status-indicator {
+         }
+         .nav-item:hover {
+            color: #3b82f6;
+         }
+         .nav-item.active {
+            color: #3b82f6;
+         }
+         .status-indicator {
             transition: all 0.3s ease;
-        }
-        .filter-button.active {
-            background-color: #3B82F6;
+         }
+         .filter-button.active {
+            background-color: #3b82f6;
             color: white;
-        }
-        .filter-button {
+         }
+         .filter-button {
             transition: all 0.2s ease;
-        }
-        .pulse {
+         }
+         .pulse {
             animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
+         }
+         @keyframes pulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+               box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
             }
             70% {
-                box-shadow: 0 0 0 10px rgba(52, 211, 153, 0);
+               box-shadow: 0 0 0 10px rgba(52, 211, 153, 0);
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+               box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
             }
-        }
-    </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.-right-1{right:-0.25rem}.-top-1{top:-0.25rem}.left-3{left:0.75rem}.top-3\.5{top:0.875rem}.bottom-0{bottom:0px}.left-0{left:0px}.right-0{right:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mx-4{margin-left:1rem;margin-right:1rem}.mb-20{margin-bottom:5rem}.mb-6{margin-bottom:1.5rem}.mr-1{margin-right:0.25rem}.mr-4{margin-right:1rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-20{height:5rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-8{height:2rem}.h-full{height:100%}.max-h-\[calc\(100vh-280px\)\]{max-height:calc(100vh - 280px)}.min-h-screen{min-height:100vh}.w-20{width:5rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.max-w-6xl{max-width:72rem}.max-w-md{max-width:28rem}.flex-shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.flex-grow-\[2\]{flex-grow:2}.cursor-pointer{cursor:pointer}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.overflow-y-auto{overflow-y:auto}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-2xl{border-radius:1rem}.rounded-l-md{border-top-left-radius:0.375rem;border-bottom-left-radius:0.375rem}.rounded-r-md{border-top-right-radius:0.375rem;border-bottom-right-radius:0.375rem}.border{border-width:1px}.border-2{border-width:2px}.border-t{border-top-width:1px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-400{--tw-bg-opacity:1;background-color:rgb(74 222 128 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-red-400{--tw-bg-opacity:1;background-color:rgb(248 113 113 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.p-1\.5{padding:0.375rem}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pl-10{padding-left:2.5rem}.pr-2{padding-right:0.5rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:text-blue-800:hover{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.hover\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.focus\:border-blue-500:focus{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}</style></head>
-<body class="bg-white min-h-screen">
-    <div class="container mx-auto px-4 py-6 max-w-6xl">
-        <!-- Header -->
-        <header class="mb-6">
+         }
+      </style>
+      <style>
+         *,
+         ::before,
+         ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style: ;
+         }
+         ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style: ;
+         } /* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */
+         *,
+         ::after,
+         ::before {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb;
+         }
+         ::after,
+         ::before {
+            --tw-content: "";
+         }
+         :host,
+         html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -moz-tab-size: 4;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            -webkit-tap-highlight-color: transparent;
+         }
+         body {
+            margin: 0;
+            line-height: inherit;
+         }
+         hr {
+            height: 0;
+            color: inherit;
+            border-top-width: 1px;
+         }
+         abbr:where([title]) {
+            -webkit-text-decoration: underline dotted;
+            text-decoration: underline dotted;
+         }
+         h1,
+         h2,
+         h3,
+         h4,
+         h5,
+         h6 {
+            font-size: inherit;
+            font-weight: inherit;
+         }
+         a {
+            color: inherit;
+            text-decoration: inherit;
+         }
+         b,
+         strong {
+            font-weight: bolder;
+         }
+         code,
+         kbd,
+         pre,
+         samp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            font-size: 1em;
+         }
+         small {
+            font-size: 80%;
+         }
+         sub,
+         sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+         }
+         sub {
+            bottom: -0.25em;
+         }
+         sup {
+            top: -0.5em;
+         }
+         table {
+            text-indent: 0;
+            border-color: inherit;
+            border-collapse: collapse;
+         }
+         button,
+         input,
+         optgroup,
+         select,
+         textarea {
+            font-family: inherit;
+            font-feature-settings: inherit;
+            font-variation-settings: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0;
+         }
+         button,
+         select {
+            text-transform: none;
+         }
+         button,
+         input:where([type="button"]),
+         input:where([type="reset"]),
+         input:where([type="submit"]) {
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none;
+         }
+         :-moz-focusring {
+            outline: auto;
+         }
+         :-moz-ui-invalid {
+            box-shadow: none;
+         }
+         progress {
+            vertical-align: baseline;
+         }
+         ::-webkit-inner-spin-button,
+         ::-webkit-outer-spin-button {
+            height: auto;
+         }
+         [type="search"] {
+            -webkit-appearance: textfield;
+            outline-offset: -2px;
+         }
+         ::-webkit-search-decoration {
+            -webkit-appearance: none;
+         }
+         ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit;
+         }
+         summary {
+            display: list-item;
+         }
+         blockquote,
+         dd,
+         dl,
+         figure,
+         h1,
+         h2,
+         h3,
+         h4,
+         h5,
+         h6,
+         hr,
+         p,
+         pre {
+            margin: 0;
+         }
+         fieldset {
+            margin: 0;
+            padding: 0;
+         }
+         legend {
+            padding: 0;
+         }
+         menu,
+         ol,
+         ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+         }
+         dialog {
+            padding: 0;
+         }
+         textarea {
+            resize: vertical;
+         }
+         input::placeholder,
+         textarea::placeholder {
+            opacity: 1;
+            color: #9ca3af;
+         }
+         [role="button"],
+         button {
+            cursor: pointer;
+         }
+         :disabled {
+            cursor: default;
+         }
+         audio,
+         canvas,
+         embed,
+         iframe,
+         img,
+         object,
+         svg,
+         video {
+            display: block;
+            vertical-align: middle;
+         }
+         img,
+         video {
+            max-width: 100%;
+            height: auto;
+         }
+         [hidden]:where(:not([hidden="until-found"])) {
+            display: none;
+         }
+         .container {
+            width: 100%;
+         }
+         @media (min-width: 640px) {
+            .container {
+               max-width: 640px;
+            }
+         }
+         @media (min-width: 768px) {
+            .container {
+               max-width: 768px;
+            }
+         }
+         @media (min-width: 1024px) {
+            .container {
+               max-width: 1024px;
+            }
+         }
+         @media (min-width: 1280px) {
+            .container {
+               max-width: 1280px;
+            }
+         }
+         @media (min-width: 1536px) {
+            .container {
+               max-width: 1536px;
+            }
+         }
+         .fixed {
+            position: fixed;
+         }
+         .absolute {
+            position: absolute;
+         }
+         .relative {
+            position: relative;
+         }
+         .inset-0 {
+            inset: 0px;
+         }
+         .-right-1 {
+            right: -0.25rem;
+         }
+         .-top-1 {
+            top: -0.25rem;
+         }
+         .left-3 {
+            left: 0.75rem;
+         }
+         .top-3\.5 {
+            top: 0.875rem;
+         }
+         .bottom-0 {
+            bottom: 0px;
+         }
+         .left-0 {
+            left: 0px;
+         }
+         .right-0 {
+            right: 0px;
+         }
+         .z-50 {
+            z-index: 50;
+         }
+         .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+         }
+         .mx-4 {
+            margin-left: 1rem;
+            margin-right: 1rem;
+         }
+         .mb-20 {
+            margin-bottom: 5rem;
+         }
+         .mb-6 {
+            margin-bottom: 1.5rem;
+         }
+         .mr-1 {
+            margin-right: 0.25rem;
+         }
+         .mr-4 {
+            margin-right: 1rem;
+         }
+         .mt-1 {
+            margin-top: 0.25rem;
+         }
+         .mt-2 {
+            margin-top: 0.5rem;
+         }
+         .mb-2 {
+            margin-bottom: 0.5rem;
+         }
+         .mb-4 {
+            margin-bottom: 1rem;
+         }
+         .flex {
+            display: flex;
+         }
+         .grid {
+            display: grid;
+         }
+         .hidden {
+            display: none;
+         }
+         .h-20 {
+            height: 5rem;
+         }
+         .h-4 {
+            height: 1rem;
+         }
+         .h-5 {
+            height: 1.25rem;
+         }
+         .h-6 {
+            height: 1.5rem;
+         }
+         .h-8 {
+            height: 2rem;
+         }
+         .h-full {
+            height: 100%;
+         }
+         .max-h-\[calc\(100vh-280px\)\] {
+            max-height: calc(100vh - 280px);
+         }
+         .min-h-screen {
+            min-height: 100vh;
+         }
+         .w-20 {
+            width: 5rem;
+         }
+         .w-4 {
+            width: 1rem;
+         }
+         .w-5 {
+            width: 1.25rem;
+         }
+         .w-6 {
+            width: 1.5rem;
+         }
+         .w-8 {
+            width: 2rem;
+         }
+         .w-full {
+            width: 100%;
+         }
+         .max-w-6xl {
+            max-width: 72rem;
+         }
+         .max-w-md {
+            max-width: 28rem;
+         }
+         .flex-shrink-0 {
+            flex-shrink: 0;
+         }
+         .flex-grow {
+            flex-grow: 1;
+         }
+         .flex-grow-\[2\] {
+            flex-grow: 2;
+         }
+         .cursor-pointer {
+            cursor: pointer;
+         }
+         .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+         }
+         .flex-col {
+            flex-direction: column;
+         }
+         .flex-wrap {
+            flex-wrap: wrap;
+         }
+         .items-start {
+            align-items: flex-start;
+         }
+         .items-center {
+            align-items: center;
+         }
+         .justify-center {
+            justify-content: center;
+         }
+         .justify-between {
+            justify-content: space-between;
+         }
+         .justify-around {
+            justify-content: space-around;
+         }
+         .gap-2 {
+            gap: 0.5rem;
+         }
+         .gap-4 {
+            gap: 1rem;
+         }
+         .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+            margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+         }
+         .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+         }
+         .space-x-1 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(0.25rem * var(--tw-space-x-reverse));
+            margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
+         }
+         .overflow-y-auto {
+            overflow-y: auto;
+         }
+         .rounded {
+            border-radius: 0.25rem;
+         }
+         .rounded-full {
+            border-radius: 9999px;
+         }
+         .rounded-lg {
+            border-radius: 0.5rem;
+         }
+         .rounded-xl {
+            border-radius: 0.75rem;
+         }
+         .rounded-2xl {
+            border-radius: 1rem;
+         }
+         .rounded-l-md {
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+         }
+         .rounded-r-md {
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+         }
+         .border {
+            border-width: 1px;
+         }
+         .border-2 {
+            border-width: 2px;
+         }
+         .border-t {
+            border-top-width: 1px;
+         }
+         .border-gray-200 {
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity, 1));
+         }
+         .border-gray-300 {
+            --tw-border-opacity: 1;
+            border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
+         }
+         .border-white {
+            --tw-border-opacity: 1;
+            border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
+         }
+         .bg-blue-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
+         }
+         .bg-blue-500 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
+         }
+         .bg-gray-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+         }
+         .bg-green-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(220 252 231 / var(--tw-bg-opacity, 1));
+         }
+         .bg-green-400 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(74 222 128 / var(--tw-bg-opacity, 1));
+         }
+         .bg-red-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
+         }
+         .bg-red-500 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
+         }
+         .bg-white {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+         }
+         .bg-black {
+            --tw-bg-opacity: 1;
+            background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
+         }
+         .bg-blue-600 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
+         }
+         .bg-red-400 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(248 113 113 / var(--tw-bg-opacity, 1));
+         }
+         .bg-opacity-50 {
+            --tw-bg-opacity: 0.5;
+         }
+         .p-1\.5 {
+            padding: 0.375rem;
+         }
+         .p-2 {
+            padding: 0.5rem;
+         }
+         .p-3 {
+            padding: 0.75rem;
+         }
+         .p-4 {
+            padding: 1rem;
+         }
+         .p-6 {
+            padding: 1.5rem;
+         }
+         .px-2\.5 {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+         }
+         .px-3 {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+         }
+         .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+         }
+         .py-0\.5 {
+            padding-top: 0.125rem;
+            padding-bottom: 0.125rem;
+         }
+         .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+         }
+         .py-6 {
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+         }
+         .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+         }
+         .pl-10 {
+            padding-left: 2.5rem;
+         }
+         .pr-2 {
+            padding-right: 0.5rem;
+         }
+         .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem;
+         }
+         .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+         }
+         .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+         }
+         .font-bold {
+            font-weight: 700;
+         }
+         .font-medium {
+            font-weight: 500;
+         }
+         .font-semibold {
+            font-weight: 600;
+         }
+         .text-blue-500 {
+            --tw-text-opacity: 1;
+            color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+         }
+         .text-blue-600 {
+            --tw-text-opacity: 1;
+            color: rgb(37 99 235 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-400 {
+            --tw-text-opacity: 1;
+            color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-500 {
+            --tw-text-opacity: 1;
+            color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-600 {
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-700 {
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-800 {
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity, 1));
+         }
+         .text-green-800 {
+            --tw-text-opacity: 1;
+            color: rgb(22 101 52 / var(--tw-text-opacity, 1));
+         }
+         .text-red-800 {
+            --tw-text-opacity: 1;
+            color: rgb(153 27 27 / var(--tw-text-opacity, 1));
+         }
+         .text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+         }
+         .text-green-600 {
+            --tw-text-opacity: 1;
+            color: rgb(22 163 74 / var(--tw-text-opacity, 1));
+         }
+         .transition {
+            transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color,
+               -webkit-backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+         }
+         .duration-300 {
+            transition-duration: 300ms;
+         }
+         .hover\:bg-gray-200:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+         }
+         .hover\:bg-blue-700:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1));
+         }
+         .hover\:text-blue-800:hover {
+            --tw-text-opacity: 1;
+            color: rgb(30 64 175 / var(--tw-text-opacity, 1));
+         }
+         .hover\:text-gray-700:hover {
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity, 1));
+         }
+         .focus\:border-blue-500:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
+         }
+         .focus\:ring-blue-500:focus {
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
+         }
+      </style>
+   </head>
+   <body class="bg-white min-h-screen">
+      <div class="container mx-auto px-4 py-6 max-w-6xl">
+         <!-- Header -->
+         <header class="mb-6">
             <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800">Room Occupancy Status</h1>
-                    <p class="text-gray-600 mt-1">Real-time availability across campus</p>
-                </div>
-                <div class="bg-blue-50 p-2 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                </div>
+               <div>
+                  <h1 class="text-2xl font-bold text-gray-800">Room Occupancy Status</h1>
+                  <p class="text-gray-600 mt-1">Real-time availability across campus</p>
+               </div>
+               <div class="bg-blue-50 p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+               </div>
             </div>
-        </header>
+         </header>
 
-        <!-- Search and Filter Bar -->
-        <div class="mb-6 space-y-4">
+         <!-- Search and Filter Bar -->
+         <div class="mb-6 space-y-4">
             <div class="relative">
-                <input type="text" placeholder="Search for rooms..." class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
+               <input type="text" placeholder="Search for rooms..." class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+               </svg>
             </div>
-            
+
             <div class="flex flex-wrap gap-2">
-                <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg active bg-blue-500 text-white">
-                    All Rooms
-                </button>
-                <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">
-                    Available Now
-                </button>
-                <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">
-                    Library
-                </button>
-                <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">
-                    Science Building
-                </button>
-                <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">
-                    Engineering
-                </button>
-                <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">
-                    Study Rooms
-                </button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg active bg-blue-500 text-white">All Rooms</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">Available Now</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">Library</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">Science Building</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">Engineering</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-200 bg-gray-100 text-gray-700">Study Rooms</button>
             </div>
-            
+
             <div class="flex justify-between items-center">
-                <div class="text-sm text-gray-600">
-                    <span class="font-medium">42</span> rooms available now
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-sm text-gray-600">View:</span>
-                    <button class="p-1.5 bg-blue-500 rounded text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                    <button class="p-1.5 bg-gray-100 rounded text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-                        </svg>
-                    </button>
-                </div>
+               <div class="text-sm text-gray-600"><span class="font-medium" id="availableCount">0</span> rooms available now</div>
+               <div class="flex items-center space-x-2">
+                  <span class="text-sm text-gray-600">View:</span>
+                  <button class="p-1.5 bg-blue-500 rounded text-white">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                     </svg>
+                  </button>
+                  <button class="p-1.5 bg-gray-100 rounded text-gray-700">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                           stroke-width="2"
+                           d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        ></path>
+                     </svg>
+                  </button>
+               </div>
             </div>
-        </div>
+         </div>
 
-        <!-- Room Status List -->
-        <div class="space-y-4 mb-20 max-h-[calc(100vh-280px)] overflow-y-auto pr-2">
-            <!-- Available Room -->
-            <div class="room-card bg-white border border-gray-200 rounded-xl p-4 flex cursor-pointer" onclick="showRoomDetails('lib101')">
-                <div class="mr-4 flex-shrink-0">
-                    <div class="relative">
-                        <svg viewBox="0 0 100 100" class="w-20 h-20 bg-gray-100 rounded-lg p-2">
-                            <!-- Simple floor plan -->
-                            <rect x="10" y="10" width="80" height="80" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"></rect>
-                            <rect x="10" y="10" width="30" height="80" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"></rect>
-                            <rect x="40" y="10" width="50" height="40" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"></rect>
-                            <rect x="40" y="50" width="50" height="40" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"></rect>
-                            <!-- Highlight current room -->
-                            <rect x="10" y="10" width="30" height="80" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2"></rect>
-                        </svg>
-                        <div class="absolute -top-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-white status-indicator pulse"></div>
-                    </div>
-                </div>
-                <div class="flex-grow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-semibold text-gray-800">Library Room 101</h3>
-                            <p class="text-sm text-gray-600">Small Study Room • 4 People</p>
-                        </div>
-                        <div class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Available</div>
-                    </div>
-                    <div class="mt-2 flex items-center justify-between">
-                        <div class="flex items-center text-sm text-gray-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            Available for 3+ hours
-                        </div>
-                        <button class="text-blue-600 text-sm font-medium hover:text-blue-800">Book Now</button>
-                    </div>
-                </div>
-            </div>
+         <!-- Room Status List -->
+         <div id="room-list" class="space-y-4 mb-20 max-h-[calc(100vh-280px)] overflow-y-auto pr-2"></div>
+      </div>
 
+<<<<<<< Updated upstream
             <!-- Occupied Room -->
             <div class="room-card bg-white border border-gray-200 rounded-xl p-4 flex cursor-pointer" onclick="showRoomDetails('lib102')">
                 <div class="mr-4 flex-shrink-0">
@@ -377,178 +1103,248 @@
 
     <!-- Bottom Navigation Bar -->
     {% include "partials/bottom_nav.html" with active="home" %}
+=======
+      <!-- Bottom Navigation Bar -->
+      <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2">
+         <div class="flex justify-around items-center max-w-md mx-auto">
+            <div class="nav-item flex flex-col items-center p-2" onclick="window.location.href='/'">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     stroke-width="2"
+                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  ></path>
+               </svg>
+               <span class="text-xs mt-1">Home</span>
+            </div>
+            <div class="nav-item flex flex-col items-center p-2" onclick="window.location.href='/notifications/'">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     stroke-width="2"
+                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  ></path>
+               </svg>
+               <span class="text-xs mt-1">Notifications</span>
+            </div>
+            <div class="nav-item flex flex-col items-center p-2">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+               </svg>
+               <span class="text-xs mt-1">Profile</span>
+            </div>
+         </div>
+      </div>
+>>>>>>> Stashed changes
 
-    <!-- Room Details Modal -->
-    <div id="roomDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+      <!-- Room Details Modal -->
+      <div id="roomDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+         <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
             <div class="flex justify-between items-start mb-6">
-                <div>
-                    <h2 id="modalRoomTitle" class="text-2xl font-bold text-gray-800">Library Room 101</h2>
-                    <p id="modalRoomType" class="text-gray-600">Small Study Room • 4 People</p>
-                </div>
-                <button onclick="closeRoomDetails()" class="text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
+               <div>
+                  <h2 id="modalRoomTitle" class="text-2xl font-bold text-gray-800">Library Room 101</h2>
+                  <p id="modalRoomType" class="text-gray-600">Small Study Room • 4 People</p>
+               </div>
+               <button onclick="closeRoomDetails()" class="text-gray-500 hover:text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+               </button>
             </div>
 
             <div class="mb-6">
-                <div class="bg-gray-100 rounded-lg p-4 mb-4 relative" style="height: 200px;">
-                    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-                        <!-- Detailed floor plan -->
-                        <rect x="50" y="50" width="300" height="200" fill="#e5e7eb" stroke="#d1d5db" stroke-width="2"></rect>
-                        
-                        <!-- Room -->
-                        <rect x="70" y="70" width="260" height="160" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2"></rect>
-                        
-                        <!-- Door -->
-                        <line x1="200" y1="70" x2="200" y2="90" stroke="#1e40af" stroke-width="3"></line>
-                        
-                        <!-- Windows -->
-                        <line x1="100" y1="230" x2="140" y2="230" stroke="#1e40af" stroke-width="3"></line>
-                        <line x1="180" y1="230" x2="220" y2="230" stroke="#1e40af" stroke-width="3"></line>
-                        <line x1="260" y1="230" x2="300" y2="230" stroke="#1e40af" stroke-width="3"></line>
-                        
-                        <!-- Furniture -->
-                        <rect x="120" y="120" width="160" height="60" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1"></rect>
-                        <circle cx="120" cy="150" r="10" fill="#d1d5db"></circle>
-                        <circle cx="160" cy="120" r="10" fill="#d1d5db"></circle>
-                        <circle cx="160" cy="180" r="10" fill="#d1d5db"></circle>
-                        <circle cx="240" cy="120" r="10" fill="#d1d5db"></circle>
-                        <circle cx="240" cy="180" r="10" fill="#d1d5db"></circle>
-                        <circle cx="280" cy="150" r="10" fill="#d1d5db"></circle>
-                    </svg>
-                </div>
+               <div class="bg-gray-100 rounded-lg p-4 mb-4 relative" style="height: 200px">
+                  <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                     <!-- Detailed floor plan -->
+                     <rect x="50" y="50" width="300" height="200" fill="#e5e7eb" stroke="#d1d5db" stroke-width="2"></rect>
+
+                     <!-- Room -->
+                     <rect x="70" y="70" width="260" height="160" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2"></rect>
+
+                     <!-- Door -->
+                     <line x1="200" y1="70" x2="200" y2="90" stroke="#1e40af" stroke-width="3"></line>
+
+                     <!-- Windows -->
+                     <line x1="100" y1="230" x2="140" y2="230" stroke="#1e40af" stroke-width="3"></line>
+                     <line x1="180" y1="230" x2="220" y2="230" stroke="#1e40af" stroke-width="3"></line>
+                     <line x1="260" y1="230" x2="300" y2="230" stroke="#1e40af" stroke-width="3"></line>
+
+                     <!-- Furniture -->
+                     <rect x="120" y="120" width="160" height="60" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1"></rect>
+                     <circle cx="120" cy="150" r="10" fill="#d1d5db"></circle>
+                     <circle cx="160" cy="120" r="10" fill="#d1d5db"></circle>
+                     <circle cx="160" cy="180" r="10" fill="#d1d5db"></circle>
+                     <circle cx="240" cy="120" r="10" fill="#d1d5db"></circle>
+                     <circle cx="240" cy="180" r="10" fill="#d1d5db"></circle>
+                     <circle cx="280" cy="150" r="10" fill="#d1d5db"></circle>
+                  </svg>
+               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4 mb-6">
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <div class="text-sm text-gray-600">Capacity</div>
-                    <div class="font-semibold text-gray-800">4 People</div>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <div class="text-sm text-gray-600">Current Status</div>
-                    <div class="font-semibold text-green-600">Available</div>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <div class="text-sm text-gray-600">Equipment</div>
-                    <div class="font-semibold text-gray-800">Whiteboard, TV</div>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <div class="text-sm text-gray-600">Building</div>
-                    <div class="font-semibold text-gray-800">Library (1st Floor)</div>
-                </div>
+               <div class="bg-blue-50 p-3 rounded-lg">
+                  <div class="text-sm text-gray-600">Capacity</div>
+                  <div class="font-semibold text-gray-800">4 People</div>
+               </div>
+               <div class="bg-blue-50 p-3 rounded-lg">
+                  <div class="text-sm text-gray-600">Current Status</div>
+                  <div class="font-semibold text-green-600">Available</div>
+               </div>
+               <div class="bg-blue-50 p-3 rounded-lg">
+                  <div class="text-sm text-gray-600">Equipment</div>
+                  <div class="font-semibold text-gray-800">Whiteboard, TV</div>
+               </div>
+               <div class="bg-blue-50 p-3 rounded-lg">
+                  <div class="text-sm text-gray-600">Building</div>
+                  <div class="font-semibold text-gray-800">Library (1st Floor)</div>
+               </div>
             </div>
 
             <div class="mb-6">
-                <h3 class="font-medium text-gray-800 mb-2">Availability Today</h3>
-                <div class="bg-gray-100 rounded-lg p-3">
-                    <div class="flex items-center space-x-1">
-                        <div class="h-6 bg-green-400 rounded-l-md flex-grow text-xs text-white flex items-center justify-center">8:00 - 10:00</div>
-                        <div class="h-6 bg-red-400 flex-grow text-xs text-white flex items-center justify-center">10:00 - 11:30</div>
-                        <div class="h-6 bg-green-400 flex-grow-[2] text-xs text-white flex items-center justify-center">11:30 - 15:30</div>
-                        <div class="h-6 bg-red-400 flex-grow text-xs text-white flex items-center justify-center">15:30 - 17:00</div>
-                        <div class="h-6 bg-green-400 rounded-r-md flex-grow text-xs text-white flex items-center justify-center">17:00 - 22:00</div>
-                    </div>
-                    <div class="flex justify-between mt-1 text-xs text-gray-500">
-                        <span>8:00</span>
-                        <span>12:00</span>
-                        <span>16:00</span>
-                        <span>20:00</span>
-                    </div>
-                </div>
+               <h3 class="font-medium text-gray-800 mb-2">Availability Today</h3>
+               <div class="bg-gray-100 rounded-lg p-3">
+                  <div class="flex items-center space-x-1">
+                     <div class="h-6 bg-green-400 rounded-l-md flex-grow text-xs text-white flex items-center justify-center">8:00 - 10:00</div>
+                     <div class="h-6 bg-red-400 flex-grow text-xs text-white flex items-center justify-center">10:00 - 11:30</div>
+                     <div class="h-6 bg-green-400 flex-grow-[2] text-xs text-white flex items-center justify-center">11:30 - 15:30</div>
+                     <div class="h-6 bg-red-400 flex-grow text-xs text-white flex items-center justify-center">15:30 - 17:00</div>
+                     <div class="h-6 bg-green-400 rounded-r-md flex-grow text-xs text-white flex items-center justify-center">17:00 - 22:00</div>
+                  </div>
+                  <div class="flex justify-between mt-1 text-xs text-gray-500">
+                     <span>8:00</span>
+                     <span>12:00</span>
+                     <span>16:00</span>
+                     <span>20:00</span>
+                  </div>
+               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-                <button class="py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300">
-                    Book Now
-                </button>
-                <button class="py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition duration-300">
-                    View Schedule
-                </button>
+               <button class="py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300">Book Now</button>
+               <button class="py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition duration-300">View Schedule</button>
             </div>
-        </div>
-    </div>
+         </div>
+      </div>
 
-    <script>
-        // Function to show room details modal
-        function showRoomDetails(roomId) {
-            const modal = document.getElementById('roomDetailsModal');
-            const title = document.getElementById('modalRoomTitle');
-            const type = document.getElementById('modalRoomType');
-            
-            // Set content based on room ID
-            switch(roomId) {
-                case 'lib101':
-                    title.textContent = 'Library Room 101';
-                    type.textContent = 'Small Study Room • 4 People';
-                    break;
-                case 'lib102':
-                    title.textContent = 'Library Room 102';
-                    type.textContent = 'Medium Study Room • 8 People';
-                    break;
-                case 'sci201':
-                    title.textContent = 'Science Lab 201';
-                    type.textContent = 'Chemistry Lab • 24 People';
-                    break;
-                case 'eng301':
-                    title.textContent = 'Engineering Room 301';
-                    type.textContent = 'Computer Lab • 30 People';
-                    break;
-                case 'art101':
-                    title.textContent = 'Arts Studio 101';
-                    type.textContent = 'Art Studio • 15 People';
-                    break;
-                case 'lib201':
-                    title.textContent = 'Library Room 201';
-                    type.textContent = 'Group Study Room • 12 People';
-                    break;
-                case 'sci101':
-                    title.textContent = 'Science Room 101';
-                    type.textContent = 'Lecture Hall • 120 People';
-                    break;
-                default:
-                    title.textContent = 'Room Details';
-                    type.textContent = 'Information';
+      <script>
+         let allRooms = [];
+
+         const filterConfig = {
+            Library: { field: "building", value: "library" },
+            "Science Building": { field: "building", value: "science" },
+            Engineering: { field: "building", value: "engineering" },
+            "Study Rooms": { field: "category", value: "study" },
+            Math: { field: "category", value: "math" },
+            Physics: { field: "category", value: "physics" },
+            Arts: { field: "category", value: "arts" },
+            Computer: { field: "category", value: "computer" },
+         };
+
+         async function fetchRooms() {
+            const response = await fetch("/occupancy/api/real-time/");
+            const rooms = await response.json();
+            allRooms = rooms;
+            applyFilters();
+         }
+
+         function applyFilters() {
+            const searchQuery = document.getElementById("roomSearchInput").value.toLowerCase();
+            const activeFilter = document.querySelector(".filter-button.active")?.textContent.trim();
+
+            let filteredRooms = [...allRooms];
+
+            // Arama
+            if (searchQuery) {
+               filteredRooms = filteredRooms.filter((room) => room.name.toLowerCase().includes(searchQuery) || room.category.toLowerCase().includes(searchQuery));
             }
-            
-            // Show the modal
-            modal.classList.remove('hidden');
-        }
-        
-        // Function to close room details modal
-        function closeRoomDetails() {
-            const modal = document.getElementById('roomDetailsModal');
-            modal.classList.add('hidden');
-        }
-        
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('roomDetailsModal');
-            if (event.target === modal) {
-                closeRoomDetails();
+
+            // Kategori veya durum filtresi
+            if (activeFilter && activeFilter !== "All Rooms") {
+               if (activeFilter === "Available Now") {
+                  filteredRooms = filteredRooms.filter((room) => room.status === "available");
+               } else if (filterConfig[activeFilter]) {
+                  const { field, value } = filterConfig[activeFilter];
+                  filteredRooms = filteredRooms.filter((room) => room[field] && room[field].toLowerCase().includes(value));
+               }
             }
-        }
-        
-        // Filter buttons functionality
-        document.querySelectorAll('.filter-button').forEach(button => {
-            button.addEventListener('click', function() {
-                // Remove active class from all buttons
-                document.querySelectorAll('.filter-button').forEach(btn => {
-                    btn.classList.remove('active', 'bg-blue-500', 'text-white');
-                    btn.classList.add('bg-gray-100', 'text-gray-700');
-                });
-                
-                // Add active class to clicked button
-                this.classList.remove('bg-gray-100', 'text-gray-700');
-                this.classList.add('active', 'bg-blue-500', 'text-white');
-                
-                // Here you would normally filter the rooms based on the selected filter
-                // For this demo, we're just changing the button appearance
+
+            renderRooms(filteredRooms);
+
+            // Sayacı güncelle
+            const countAvailable = filteredRooms.filter((r) => r.status === "available").length;
+            const countSpan = document.getElementById("availableCount");
+            if (countSpan) countSpan.textContent = countAvailable;
+         }
+
+         function renderRooms(rooms) {
+            const container = document.getElementById("room-list");
+            container.innerHTML = "";
+
+            rooms.forEach((room) => {
+               const statusClass = room.status === "available" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+               const statusDot = room.status === "available" ? "bg-green-400 pulse" : "bg-red-500";
+               const statusText = room.status.charAt(0).toUpperCase() + room.status.slice(1);
+               const availableInfo =
+                  room.status === "available" ? `Available • ${room.capacity - room.current_person_count} spot(s) left` : `Occupied • ${room.current_person_count} / ${room.capacity}`;
+
+               const card = `
+            <div class="room-card bg-white border border-gray-200 rounded-xl p-4 flex">
+               <div class="mr-4 flex-shrink-0">
+                  <div class="relative">
+                     <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 font-bold text-sm">${room.name.split(" ")[0]}</div>
+                     <div class="absolute -top-1 -right-1 w-6 h-6 ${statusDot} rounded-full border-2 border-white status-indicator"></div>
+                  </div>
+               </div>
+               <div class="flex-grow">
+                  <div class="flex justify-between items-start">
+                     <div>
+                        <h3 class="font-semibold text-gray-800">${room.name}</h3>
+                        <p class="text-sm text-gray-600">${room.category} • ${room.capacity} People</p>
+                     </div>
+                     <div class="${statusClass} text-xs font-medium px-2.5 py-0.5 rounded-full">${statusText}</div>
+                  </div>
+                  <div class="mt-2 flex items-center justify-between">
+                     <div class="flex items-center text-sm text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        ${availableInfo}
+                     </div>
+                     <button class="text-blue-600 text-sm font-medium hover:text-blue-800">
+                        ${room.status === "available" ? "Book Now" : "View Schedule"}
+                     </button>
+                  </div>
+               </div>
+            </div>
+         `;
+               container.innerHTML += card;
             });
-        });
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d32a536222e42a',t:'MTc0NjgxNDM0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
-</body></html>
+         }
 
+         document.querySelectorAll(".filter-button").forEach((button) => {
+            button.addEventListener("click", function () {
+               document.querySelectorAll(".filter-button").forEach((btn) => {
+                  btn.classList.remove("active", "bg-blue-500", "text-white");
+                  btn.classList.add("bg-gray-100", "text-gray-700");
+               });
+
+               this.classList.remove("bg-gray-100", "text-gray-700");
+               this.classList.add("active", "bg-blue-500", "text-white");
+
+               applyFilters();
+            });
+         });
+
+         window.addEventListener("DOMContentLoaded", () => {
+            const input = document.querySelector("input[placeholder='Search for rooms...']");
+            input.id = "roomSearchInput";
+            input.addEventListener("input", applyFilters);
+         });
+
+         fetchRooms();
+         setInterval(fetchRooms, 10000);
+      </script>
+   </body>
+</html>

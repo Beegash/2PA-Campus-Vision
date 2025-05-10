@@ -122,3 +122,4 @@ def cancel_reservation(request):
         return JsonResponse({"success": True})
     except Reservation.DoesNotExist:
         return JsonResponse({"error": "Reservation not found or not yours"}, status=404)
+

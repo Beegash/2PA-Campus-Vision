@@ -1,3 +1,4 @@
+from django.db import models
 from datetime import timedelta
 from django.utils import timezone
 from reservations.models import Reservation
@@ -44,3 +45,21 @@ def recommend_area(start_time, end_time, user=None, reason_log=True):
         RecommendationLog.objects.create(user=user, area=area, reason=reason)
 
     return area
+
+
+class Room(models.Model):
+    STATUS_CHOICES = [
+        ('available', 'Available'),
+        ('occupied', 'Occupied'),
+    ]
+
+    name = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    capacity = models.PositiveIntegerField()
+    current_person_count = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
+
+    building = models.CharField(max_length=100, blank=True, null=True)  # Science, Library gibi
+
+    def __str__(self):
+        return self.name
