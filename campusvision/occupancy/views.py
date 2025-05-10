@@ -8,7 +8,12 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import OccupancyData
 from areas.models import Area
+from django.http import JsonResponse
+from .models import Room
 
+def get_categories(request):
+    categories = Room.objects.values_list('category', flat=True).distinct()
+    return JsonResponse(list(categories), safe=False)
 
 
 class OccupancyViewSet(viewsets.ModelViewSet):
