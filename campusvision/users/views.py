@@ -10,7 +10,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/')  # Ana sayfaya yönlendir
+            return redirect('dashboard')  # Başarılı girişte dashboard'a yönlendir
         else:
             return render(request, 'login_c.html', {'error': 'Invalid username or password'})
     return render(request, 'login_c.html')

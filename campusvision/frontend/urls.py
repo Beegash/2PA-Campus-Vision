@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.dashboard, name='dashboard'),
+    path('', views.root_redirect, name='root'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('notifications/', views.notifications, name='notifications'),
     path('quiet-zone/', views.quiet_zone_map, name='quiet_zone'),
     path('real-time/', views.real_time_occupancy, name='real_time_occupancy'),

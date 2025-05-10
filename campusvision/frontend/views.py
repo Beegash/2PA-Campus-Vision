@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from areas.models import Area 
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -49,3 +49,6 @@ def make_reservation(request):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=400)
     return JsonResponse({'error': 'Only POST method allowed'}, status=405)
+
+def root_redirect(request):
+    return redirect('login')
