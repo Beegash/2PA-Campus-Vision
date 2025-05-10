@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+from .models import Room
 from rest_framework import viewsets
 from .models import OccupancyData
 from .serializers import OccupancySerializer
@@ -73,3 +75,18 @@ class RealTimeOccupancyAPIView(APIView):
             })
 
         return Response(response)
+    
+
+def get_real_time_occupancy(request):
+    rooms = Room.objects.all()  # Hiçbir filtre yok!
+    data = [
+        {
+            "name": room.name,
+            "category": room.category,
+            "capacity": room.capacity,
+            "current_person_count": room.current_person_count,
+            "status": room.status,
+        }
+        for room in rooms
+    ]
+    return JsonResponse(data, safe=False)
