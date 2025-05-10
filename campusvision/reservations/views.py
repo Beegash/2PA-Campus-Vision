@@ -14,6 +14,9 @@ from django.utils.dateparse import parse_datetime
 from django.views.decorators.http import require_GET
 from .models import Reservation
 from areas.models import Area
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import Reservation
 
 
 
@@ -82,3 +85,13 @@ def get_unavailable_rooms(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
+    
+@login_required
+def my_reservations(request):
+    upcoming = Reservation.objects.filter(user=request.user, start_time__gte=timezone.now()).order_by('start_time')
+    past = Reservation.objects.filter(user=request.user, end_time__lt=timezone.now()).order_by('-end_time')
+
+    return render(request, 'my_reservations.html', {
+        'upcoming_reservations': upcoming,
+        'past_reservations': past,
+    })

@@ -944,17 +944,17 @@
             </div>
 
             <div class="flex flex-wrap gap-2 mb-4">
-               <button class="px-3 py-2 text-sm font-medium rounded-lg bg-blue-500 text-white">All Types</button>
-               <button class="px-3 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200">Study Rooms</button>
-               <button class="px-3 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200">Labs</button>
-               <button class="px-3 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200">Classrooms</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg bg-blue-500 text-white" data-category="all">All Types</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200" data-category="quiet">Study Rooms</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200" data-category="group">Labs</button>
+               <button class="filter-button px-3 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200" data-category="mixed">Classrooms</button>
             </div>
          </div>
 
          <!-- Available Rooms List -->
          <div class="space-y-4 mb-20 max-h-[calc(100vh-600px)] min-h-[300px] overflow-y-auto pr-2">
             {% for area in areas %}
-            <div class="room-card bg-white border border-gray-200 rounded-xl p-4 cursor-pointer" onclick="selectRoom('room-{{ area.id }}')">
+            <div class="room-card bg-white border border-gray-200 rounded-xl p-4 cursor-pointer" data-category="{{ area.label }}" onclick="selectRoom('room-{{ area.id }}')">
                <div class="flex items-start justify-between mb-3">
                   <div class="flex items-center">
                      <div class="relative mr-3">
@@ -1255,7 +1255,7 @@
                console.error("Fetch error:", err);
             }
          }
-         
+
          function convertTo24Hr(time) {
             const [hourMin, meridiem] = time.split(" ");
             let [hour] = hourMin.split(":");
@@ -1264,6 +1264,31 @@
             if (meridiem === "AM" && hour === 12) hour = 0;
             return `${hour.toString().padStart(2, "0")}:00`;
          }
+
+         document.querySelectorAll(".filter-button").forEach((button) => {
+            button.addEventListener("click", () => {
+               const selectedCategory = button.getAttribute("data-category");
+      
+               // Buton renklerini güncelle
+               document.querySelectorAll(".filter-button").forEach((btn) => {
+                  btn.classList.remove("bg-blue-500", "text-white");
+                  btn.classList.add("bg-gray-100", "text-gray-700");
+               });
+               button.classList.remove("bg-gray-100", "text-gray-700");
+               button.classList.add("bg-blue-500", "text-white");
+      
+               // Odaları filtrele
+               document.querySelectorAll(".room-card").forEach((card) => {
+                  const roomCategory = card.getAttribute("data-category");
+                  if (selectedCategory === "all" || roomCategory === selectedCategory) {
+                     card.style.display = "block";
+                  } else {
+                     card.style.display = "none";
+                  }
+               });
+            });
+         });
+         
       </script>
    </body>
 </html>
