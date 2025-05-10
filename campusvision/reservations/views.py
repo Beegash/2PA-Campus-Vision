@@ -96,6 +96,15 @@ def get_unavailable_rooms(request):
 
 def my_reservations(request):
     now = timezone.now()
+    if not request.user.is_authenticated:
+        # TEST AMAÇLI: Giriş yapmamışsa tüm rezervasyonları göster
+        upcoming = Reservation.objects.filter(start_time__gte=now).order_by('start_time')
+        past = Reservation.objects.filter(start_time__lt=now).order_by('-start_time')
+        return render(request, 'my_reservations.html', {
+            'upcoming_reservations': upcoming,
+            'past_reservations': past,
+            'not_logged_in': True,  # Şablonda mesaj göstermek için
+        })
     upcoming = Reservation.objects.filter(user=request.user, start_time__gte=now).order_by('start_time')
     past = Reservation.objects.filter(user=request.user, start_time__lt=now).order_by('-start_time')
     return render(request, 'my_reservations.html', {
