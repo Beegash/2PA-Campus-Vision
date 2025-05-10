@@ -8,21 +8,10 @@ from datetime import datetime, timedelta
 from .serializers import ReservationSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework import viewsets
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.dateparse import parse_datetime
-from django.views.decorators.http import require_GET
-from .models import Reservation
-from areas.models import Area
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from .models import Reservation
-from django.views.decorators.http import require_POST
-from django.http import HttpResponseForbidden
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-
+from django.views.decorators.http import require_GET, require_POST
 
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
@@ -38,7 +27,6 @@ def make_reservation(request):
         duration = request.POST.get("duration")      # örn: "1 hour"
 
         try:
-            # Start ve end datetime hesapla
             start_dt = datetime.strptime(f"{date} {start_time}", "%d %b %I:%M %p")
             if duration == "1 hour":
                 end_dt = start_dt + timedelta(hours=1)
@@ -49,7 +37,6 @@ def make_reservation(request):
 
             area = Area.objects.get(id=area_id)
 
-            # Rezervasyonu oluştur
             Reservation.objects.create(
                 user=request.user,
                 area=area,
@@ -57,7 +44,7 @@ def make_reservation(request):
                 end_time=end_dt
             )
             messages.success(request, "Room successfully reserved! 🎉")
-            return redirect("room_reservation")  # view adıyla eşleşmeli
+            return redirect("room_reservation")
         except Exception as e:
             messages.error(request, f"Reservation failed: {str(e)}")
 
@@ -65,36 +52,30 @@ def make_reservation(request):
 
 @require_GET
 def get_unavailable_rooms(request):
-    """
-    Parametreler: date=2025-05-16, start_time=15:00, duration=1
-    """
     date = request.GET.get("date")
     start_time = request.GET.get("start_time")
     duration = int(request.GET.get("duration", 1))
 
     try:
-        # string → datetime
         full_start = parse_datetime(f"{date}T{start_time}")
         full_end = full_start + timedelta(hours=duration)
 
-        # Bu zaman aralığına denk gelen rezervasyonlar
         reservations = Reservation.objects.filter(
             start_time__lt=full_end,
             end_time__gt=full_start
         )
 
-        # Dolu olan alan ID'lerini döndür
         busy_area_ids = reservations.values_list("area_id", flat=True)
         return JsonResponse({"unavailable": list(busy_area_ids)})
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
-    
+
 @login_required
 def my_reservations(request):
-    upcoming = Reservation.objects.filter(user=request.user, start_time__gte=timezone.now()).order_by('start_time')
-    past = Reservation.objects.filter(user=request.user, end_time__lt=timezone.now()).order_by('-end_time')
-
+    now = timezone.now()
+    upcoming = Reservation.objects.filter(user=request.user, start_time__gte=now).order_by('start_time')
+    past = Reservation.objects.filter(user=request.user, start_time__lt=now).order_by('-start_time')
     return render(request, 'my_reservations.html', {
         'upcoming_reservations': upcoming,
         'past_reservations': past,
@@ -107,7 +88,7 @@ def cancel_reservation(request):
     reservation_id = request.POST.get("reservation_id")
     try:
         reservation = Reservation.objects.get(id=reservation_id, user=request.user)
-        reservation.delete()
+        reservation.delete()  # Veritabanından tamamen siler
         return JsonResponse({"success": True})
     except Reservation.DoesNotExist:
         return JsonResponse({"error": "Reservation not found or not yours"}, status=404)
