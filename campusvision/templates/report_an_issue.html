@@ -101,7 +101,7 @@
             </div>
 
             <!-- New Report Form -->
-            <div id="newReportForm" class="slide-in">
+            <form id="reportForm" class="slide-in">
                 <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4">Report Details</h2>
                     
@@ -217,11 +217,11 @@
                     </div>
                     
                     <!-- Submit Button -->
-                    <button id="submitReport" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition duration-300 flex items-center justify-center">
+                    <button id="submitReport" type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition duration-300 flex items-center justify-center">
                         Submit Report
                     </button>
                 </div>
-            </div>
+            </form>
 
             <!-- Submission Confirmation (Hidden by default) -->
             <div id="submissionConfirmation" class="hidden fade-in bg-green-50 border border-green-200 rounded-xl p-6 mb-6 text-center">
@@ -240,112 +240,9 @@
 
             <!-- My Reports (Hidden by default) -->
             <div id="myReportsContent" class="hidden slide-in">
-                <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+                <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6" id="reportsListContainer">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4">My Recent Reports</h2>
-                    
-                    <!-- Status Item 1 -->
-                    <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">In Progress</span>
-                                    <span class="text-sm text-gray-500">May 15, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-800">Broken Light Fixture</h3>
-                                <p class="text-sm text-gray-600 mt-1">Science Building, Room 302</p>
-                            </div>
-                            <span class="text-xs font-medium text-blue-600">MR-2023-0541</span>
-                        </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                    Scheduled: May 17, 2023
-                                </div>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Status Item 2 -->
-                    <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Completed</span>
-                                    <span class="text-sm text-gray-500">May 10, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-800">Leaking Faucet</h3>
-                                <p class="text-sm text-gray-600 mt-1">Dormitory A, 2nd Floor Bathroom</p>
-                            </div>
-                            <span class="text-xs font-medium text-blue-600">MR-2023-0532</span>
-                        </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Resolved: May 12, 2023
-                                </div>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Status Item 3 -->
-                    <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Pending</span>
-                                    <span class="text-sm text-gray-500">May 14, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-800">Broken Chair</h3>
-                                <p class="text-sm text-gray-600 mt-1">Library, 3rd Floor Study Area</p>
-                            </div>
-                            <span class="text-xs font-medium text-blue-600">MR-2023-0539</span>
-                        </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Awaiting review
-                                </div>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Status Item 4 -->
-                    <div class="status-item bg-white border border-gray-200 rounded-lg p-4">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Assigned</span>
-                                    <span class="text-sm text-gray-500">May 13, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-800">Wi-Fi Connectivity Issue</h3>
-                                <p class="text-sm text-gray-600 mt-1">Student Union, Main Hall</p>
-                            </div>
-                            <span class="text-xs font-medium text-blue-600">MR-2023-0536</span>
-                        </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                    Assigned to: IT Support
-                                </div>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="reportsList"></div>
                 </div>
             </div>
         </div>
@@ -431,29 +328,34 @@
         });
         
         // Form submission
-        document.getElementById('submitReport').addEventListener('click', function() {
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             // Simple validation
             const building = document.getElementById('building').value;
             const location = document.getElementById('location').value;
             const issueType = document.getElementById('issueType').value;
             const priority = document.getElementById('priority').value;
             const description = document.getElementById('description').value;
-            
+            const imageInput = document.getElementById('imageUpload');
+
             if (!building || !location || !issueType || !priority || !description) {
                 alert('Please fill in all required fields.');
                 return;
             }
-            
+
             // Create form data
             const formData = new FormData();
             formData.append('building', building);
             formData.append('location', location);
-            formData.append('issueType', issueType);
+            formData.append('issue_type', issueType);
             formData.append('priority', priority);
             formData.append('description', description);
-            
+            if (imageInput.files.length > 0) {
+                formData.append('image', imageInput.files[0]);
+            }
+
             // Submit form
-            fetch('/api/submit-maintenance-report/', {
+            fetch('/api/issues/', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -462,13 +364,14 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'success') {
+                console.log('API response:', data);
+                if (data.id) {
                     // Show confirmation with report ID
                     document.getElementById('newReportForm').classList.add('hidden');
                     document.getElementById('submissionConfirmation').classList.remove('hidden');
-                    document.querySelector('#submissionConfirmation .font-medium').textContent = data.report_id;
+                    document.querySelector('#submissionConfirmation .font-medium').textContent = data.id;
                 } else {
-                    alert('Error submitting report: ' + data.message);
+                    alert('Error submitting report: ' + (data.detail || 'Bilinmeyen hata.'));
                 }
             })
             .catch(error => {
@@ -478,30 +381,27 @@
         
         // Load user reports
         function loadUserReports() {
-            fetch('/api/get-user-reports/')
+            fetch('/api/issues/')
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 'success') {
-                        const reportsContainer = document.querySelector('#myReportsContent .bg-white');
-                        const reportsList = reportsContainer.querySelector('.status-item').parentNode;
-                        reportsList.innerHTML = ''; // Clear existing reports
-                        
-                        data.reports.forEach(report => {
+                    const reportsList = document.getElementById('reportsList');
+                    reportsList.innerHTML = '';
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(report => {
                             const statusClass = getStatusClass(report.status);
                             const statusText = getStatusText(report.status);
-                            
                             const reportHtml = `
                                 <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <div class="flex items-center mb-1">
                                                 <span class="${statusClass} text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">${statusText}</span>
-                                                <span class="text-sm text-gray-500">${report.created_at}</span>
+                                                <span class="text-sm text-gray-500">${report.reported_at ? report.reported_at.split('T')[0] : ''}</span>
                                             </div>
                                             <h3 class="font-medium text-gray-800">${report.issue_type}</h3>
                                             <p class="text-sm text-gray-600 mt-1">${report.building}, ${report.location}</p>
                                         </div>
-                                        <span class="text-xs font-medium text-blue-600">${report.report_id}</span>
+                                        <span class="text-xs font-medium text-blue-600">${report.id}</span>
                                     </div>
                                     <div class="mt-3 pt-3 border-t border-gray-100">
                                         <div class="flex justify-between items-center">
@@ -514,15 +414,14 @@
                                     </div>
                                 </div>
                             `;
-                            
                             reportsList.insertAdjacentHTML('beforeend', reportHtml);
                         });
                     } else {
-                        alert('Error loading reports: ' + data.message);
+                        reportsList.innerHTML = '<div class="text-gray-500 text-center py-6">No reports found.</div>';
                     }
                 })
                 .catch(error => {
-                    alert('Error loading reports: ' + error);
+                    document.getElementById('reportsList').innerHTML = '<div class="text-red-500 text-center py-6">Error loading reports.</div>';
                 });
         }
         
@@ -600,6 +499,8 @@
             document.getElementById('newReportForm').classList.remove('hidden');
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d35d9d64beb697',t:'MTc0NjgxNjQ1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+<script>
+  console.log('DEBUG: JS çalışıyor!');
+</script>
 </body></html>
 
