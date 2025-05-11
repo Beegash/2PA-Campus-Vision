@@ -1512,7 +1512,12 @@
                   <!-- Date -->
                   <div class="mb-4">
                      <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                     <input id="date" type="date" class="block w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" />
+                     <input 
+                        id="date" 
+                        type="date" 
+                        class="block w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
+                        max=""
+                     />
                   </div>
 
                   <!-- Description -->
@@ -1702,7 +1707,7 @@
             formData.append("location", location);
             formData.append("contact_info", contact_info);
             formData.append("found", found);
-            formData.append("created_at", date);
+            formData.append("created_at", new Date(date).toISOString());
             if (image) formData.append("image", image);
 
             const submitButton = lostFoundForm.querySelector('button[type="submit"]');
@@ -1799,7 +1804,13 @@
          document.addEventListener("DOMContentLoaded", () => {
             fetchLostItems();
             const today = new Date();
-            document.getElementById("date").value = today.toISOString().split("T")[0];
+            const lastMonth = new Date();
+            lastMonth.setMonth(lastMonth.getMonth() - 1);
+            
+            const dateInput = document.getElementById("date");
+            dateInput.max = today.toISOString().split("T")[0];
+            dateInput.min = lastMonth.toISOString().split("T")[0];
+            dateInput.value = today.toISOString().split("T")[0];
          });
       </script>
 
