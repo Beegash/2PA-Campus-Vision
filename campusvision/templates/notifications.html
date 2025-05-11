@@ -1,466 +1,1287 @@
-<html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance Report - CampusVision</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .nav-item {
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="csrf-token" content="{{ csrf_token }}" />
+      <title>Maintenance Report - CampusVision</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+      <style>
+         body {
+            font-family: "Inter", sans-serif;
+         }
+         .nav-item {
             transition: all 0.2s ease;
-        }
-        .nav-item:hover {
-            color: #3B82F6;
-        }
-        .nav-item.active {
-            color: #3B82F6;
-        }
-        .form-input:focus {
-            border-color: #3B82F6;
+         }
+         .nav-item:hover {
+            color: #3b82f6;
+         }
+         .nav-item.active {
+            color: #3b82f6;
+         }
+         .form-input:focus {
+            border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        .status-badge {
+         }
+         .status-badge {
             transition: all 0.2s ease;
-        }
-        .status-item {
+         }
+         .status-item {
             transition: all 0.3s ease;
-        }
-        .status-item:hover {
+         }
+         .status-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        .pulse {
+         }
+         .pulse {
             animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
+         }
+         @keyframes pulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+               box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
             }
             70% {
-                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+               box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+               box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
             }
-        }
-        .slide-in {
+         }
+         .slide-in {
             animation: slideIn 0.3s ease-out forwards;
-        }
-        @keyframes slideIn {
+         }
+         @keyframes slideIn {
             from {
-                opacity: 0;
-                transform: translateY(20px);
+               opacity: 0;
+               transform: translateY(20px);
             }
             to {
-                opacity: 1;
-                transform: translateY(0);
+               opacity: 1;
+               transform: translateY(0);
             }
-        }
-        .fade-in {
+         }
+         .fade-in {
             animation: fadeIn 0.5s ease-out forwards;
-        }
-        @keyframes fadeIn {
+         }
+         @keyframes fadeIn {
             from {
-                opacity: 0;
+               opacity: 0;
             }
             to {
-                opacity: 1;
+               opacity: 1;
             }
-        }
-    </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-y-0{top:0px;bottom:0px}.bottom-0{bottom:0px}.left-0{left:0px}.right-0{right:0px}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-20{margin-bottom:5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mt-1{margin-top:0.25rem}.mt-3{margin-top:0.75rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.hidden{display:none}.h-10{height:2.5rem}.h-16{height:4rem}.h-32{height:8rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-8{height:2rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-16{width:4rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.max-w-6xl{max-width:72rem}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.cursor-pointer{cursor:pointer}.resize-none{resize:none}.appearance-none{-webkit-appearance:none;appearance:none}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-2{gap:0.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-green-200{--tw-border-opacity:1;border-color:rgb(187 247 208 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-6{padding-bottom:1.5rem}.pl-3{padding-left:0.75rem}.pr-10{padding-right:2.5rem}.pt-3{padding-top:0.75rem}.pt-5{padding-top:1.25rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.hover\:text-blue-800:hover{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}</style></head>
-<body class="bg-white min-h-screen">
-    <div class="container mx-auto px-4 py-6 max-w-6xl">
-        <!-- Header -->
-        <header class="mb-6">
+         }
+      </style>
+      <style>
+         *,
+         ::before,
+         ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style: ;
+         }
+         ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style: ;
+         } /* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */
+         *,
+         ::after,
+         ::before {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb;
+         }
+         ::after,
+         ::before {
+            --tw-content: "";
+         }
+         :host,
+         html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -moz-tab-size: 4;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            -webkit-tap-highlight-color: transparent;
+         }
+         body {
+            margin: 0;
+            line-height: inherit;
+         }
+         hr {
+            height: 0;
+            color: inherit;
+            border-top-width: 1px;
+         }
+         abbr:where([title]) {
+            -webkit-text-decoration: underline dotted;
+            text-decoration: underline dotted;
+         }
+         h1,
+         h2,
+         h3,
+         h4,
+         h5,
+         h6 {
+            font-size: inherit;
+            font-weight: inherit;
+         }
+         a {
+            color: inherit;
+            text-decoration: inherit;
+         }
+         b,
+         strong {
+            font-weight: bolder;
+         }
+         code,
+         kbd,
+         pre,
+         samp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            font-size: 1em;
+         }
+         small {
+            font-size: 80%;
+         }
+         sub,
+         sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+         }
+         sub {
+            bottom: -0.25em;
+         }
+         sup {
+            top: -0.5em;
+         }
+         table {
+            text-indent: 0;
+            border-color: inherit;
+            border-collapse: collapse;
+         }
+         button,
+         input,
+         optgroup,
+         select,
+         textarea {
+            font-family: inherit;
+            font-feature-settings: inherit;
+            font-variation-settings: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0;
+         }
+         button,
+         select {
+            text-transform: none;
+         }
+         button,
+         input:where([type="button"]),
+         input:where([type="reset"]),
+         input:where([type="submit"]) {
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none;
+         }
+         :-moz-focusring {
+            outline: auto;
+         }
+         :-moz-ui-invalid {
+            box-shadow: none;
+         }
+         progress {
+            vertical-align: baseline;
+         }
+         ::-webkit-inner-spin-button,
+         ::-webkit-outer-spin-button {
+            height: auto;
+         }
+         [type="search"] {
+            -webkit-appearance: textfield;
+            outline-offset: -2px;
+         }
+         ::-webkit-search-decoration {
+            -webkit-appearance: none;
+         }
+         ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit;
+         }
+         summary {
+            display: list-item;
+         }
+         blockquote,
+         dd,
+         dl,
+         figure,
+         h1,
+         h2,
+         h3,
+         h4,
+         h5,
+         h6,
+         hr,
+         p,
+         pre {
+            margin: 0;
+         }
+         fieldset {
+            margin: 0;
+            padding: 0;
+         }
+         legend {
+            padding: 0;
+         }
+         menu,
+         ol,
+         ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+         }
+         dialog {
+            padding: 0;
+         }
+         textarea {
+            resize: vertical;
+         }
+         input::placeholder,
+         textarea::placeholder {
+            opacity: 1;
+            color: #9ca3af;
+         }
+         [role="button"],
+         button {
+            cursor: pointer;
+         }
+         :disabled {
+            cursor: default;
+         }
+         audio,
+         canvas,
+         embed,
+         iframe,
+         img,
+         object,
+         svg,
+         video {
+            display: block;
+            vertical-align: middle;
+         }
+         img,
+         video {
+            max-width: 100%;
+            height: auto;
+         }
+         [hidden]:where(:not([hidden="until-found"])) {
+            display: none;
+         }
+         .container {
+            width: 100%;
+         }
+         @media (min-width: 640px) {
+            .container {
+               max-width: 640px;
+            }
+         }
+         @media (min-width: 768px) {
+            .container {
+               max-width: 768px;
+            }
+         }
+         @media (min-width: 1024px) {
+            .container {
+               max-width: 1024px;
+            }
+         }
+         @media (min-width: 1280px) {
+            .container {
+               max-width: 1280px;
+            }
+         }
+         @media (min-width: 1536px) {
+            .container {
+               max-width: 1536px;
+            }
+         }
+         .pointer-events-none {
+            pointer-events: none;
+         }
+         .fixed {
+            position: fixed;
+         }
+         .absolute {
+            position: absolute;
+         }
+         .relative {
+            position: relative;
+         }
+         .inset-y-0 {
+            top: 0px;
+            bottom: 0px;
+         }
+         .bottom-0 {
+            bottom: 0px;
+         }
+         .left-0 {
+            left: 0px;
+         }
+         .right-0 {
+            right: 0px;
+         }
+         .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+         }
+         .mb-1 {
+            margin-bottom: 0.25rem;
+         }
+         .mb-2 {
+            margin-bottom: 0.5rem;
+         }
+         .mb-20 {
+            margin-bottom: 5rem;
+         }
+         .mb-3 {
+            margin-bottom: 0.75rem;
+         }
+         .mb-4 {
+            margin-bottom: 1rem;
+         }
+         .mb-6 {
+            margin-bottom: 1.5rem;
+         }
+         .mr-1 {
+            margin-right: 0.25rem;
+         }
+         .mr-2 {
+            margin-right: 0.5rem;
+         }
+         .mt-1 {
+            margin-top: 0.25rem;
+         }
+         .mt-3 {
+            margin-top: 0.75rem;
+         }
+         .block {
+            display: block;
+         }
+         .flex {
+            display: flex;
+         }
+         .inline-flex {
+            display: inline-flex;
+         }
+         .hidden {
+            display: none;
+         }
+         .h-10 {
+            height: 2.5rem;
+         }
+         .h-16 {
+            height: 4rem;
+         }
+         .h-32 {
+            height: 8rem;
+         }
+         .h-4 {
+            height: 1rem;
+         }
+         .h-5 {
+            height: 1.25rem;
+         }
+         .h-6 {
+            height: 1.5rem;
+         }
+         .h-8 {
+            height: 2rem;
+         }
+         .min-h-screen {
+            min-height: 100vh;
+         }
+         .w-10 {
+            width: 2.5rem;
+         }
+         .w-16 {
+            width: 4rem;
+         }
+         .w-4 {
+            width: 1rem;
+         }
+         .w-5 {
+            width: 1.25rem;
+         }
+         .w-6 {
+            width: 1.5rem;
+         }
+         .w-8 {
+            width: 2rem;
+         }
+         .w-full {
+            width: 100%;
+         }
+         .max-w-6xl {
+            max-width: 72rem;
+         }
+         .max-w-md {
+            max-width: 28rem;
+         }
+         .flex-1 {
+            flex: 1 1 0%;
+         }
+         .cursor-pointer {
+            cursor: pointer;
+         }
+         .resize-none {
+            resize: none;
+         }
+         .appearance-none {
+            -webkit-appearance: none;
+            appearance: none;
+         }
+         .flex-col {
+            flex-direction: column;
+         }
+         .flex-wrap {
+            flex-wrap: wrap;
+         }
+         .items-start {
+            align-items: flex-start;
+         }
+         .items-center {
+            align-items: center;
+         }
+         .justify-center {
+            justify-content: center;
+         }
+         .justify-between {
+            justify-content: space-between;
+         }
+         .justify-around {
+            justify-content: space-around;
+         }
+         .gap-2 {
+            gap: 0.5rem;
+         }
+         .rounded-full {
+            border-radius: 9999px;
+         }
+         .rounded-lg {
+            border-radius: 0.5rem;
+         }
+         .rounded-xl {
+            border-radius: 0.75rem;
+         }
+         .border {
+            border-width: 1px;
+         }
+         .border-2 {
+            border-width: 2px;
+         }
+         .border-b {
+            border-bottom-width: 1px;
+         }
+         .border-b-2 {
+            border-bottom-width: 2px;
+         }
+         .border-t {
+            border-top-width: 1px;
+         }
+         .border-dashed {
+            border-style: dashed;
+         }
+         .border-blue-500 {
+            --tw-border-opacity: 1;
+            border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
+         }
+         .border-gray-100 {
+            --tw-border-opacity: 1;
+            border-color: rgb(243 244 246 / var(--tw-border-opacity, 1));
+         }
+         .border-gray-200 {
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity, 1));
+         }
+         .border-gray-300 {
+            --tw-border-opacity: 1;
+            border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
+         }
+         .border-green-200 {
+            --tw-border-opacity: 1;
+            border-color: rgb(187 247 208 / var(--tw-border-opacity, 1));
+         }
+         .border-transparent {
+            border-color: transparent;
+         }
+         .bg-blue-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1));
+         }
+         .bg-blue-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
+         }
+         .bg-blue-600 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
+         }
+         .bg-gray-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1));
+         }
+         .bg-green-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(220 252 231 / var(--tw-bg-opacity, 1));
+         }
+         .bg-green-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(240 253 244 / var(--tw-bg-opacity, 1));
+         }
+         .bg-red-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
+         }
+         .bg-white {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+         }
+         .bg-yellow-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(254 249 195 / var(--tw-bg-opacity, 1));
+         }
+         .p-2 {
+            padding: 0.5rem;
+         }
+         .p-4 {
+            padding: 1rem;
+         }
+         .p-6 {
+            padding: 1.5rem;
+         }
+         .px-2\.5 {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+         }
+         .px-3 {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+         }
+         .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+         }
+         .py-0\.5 {
+            padding-top: 0.125rem;
+            padding-bottom: 0.125rem;
+         }
+         .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+         }
+         .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+         }
+         .py-6 {
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+         }
+         .pb-6 {
+            padding-bottom: 1.5rem;
+         }
+         .pl-3 {
+            padding-left: 0.75rem;
+         }
+         .pr-10 {
+            padding-right: 2.5rem;
+         }
+         .pt-3 {
+            padding-top: 0.75rem;
+         }
+         .pt-5 {
+            padding-top: 1.25rem;
+         }
+         .text-center {
+            text-align: center;
+         }
+         .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem;
+         }
+         .text-base {
+            font-size: 1rem;
+            line-height: 1.5rem;
+         }
+         .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+         }
+         .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+         }
+         .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+         }
+         .font-bold {
+            font-weight: 700;
+         }
+         .font-medium {
+            font-weight: 500;
+         }
+         .font-semibold {
+            font-weight: 600;
+         }
+         .text-blue-500 {
+            --tw-text-opacity: 1;
+            color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+         }
+         .text-blue-600 {
+            --tw-text-opacity: 1;
+            color: rgb(37 99 235 / var(--tw-text-opacity, 1));
+         }
+         .text-blue-800 {
+            --tw-text-opacity: 1;
+            color: rgb(30 64 175 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-400 {
+            --tw-text-opacity: 1;
+            color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-500 {
+            --tw-text-opacity: 1;
+            color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-600 {
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-700 {
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity, 1));
+         }
+         .text-gray-800 {
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity, 1));
+         }
+         .text-green-600 {
+            --tw-text-opacity: 1;
+            color: rgb(22 163 74 / var(--tw-text-opacity, 1));
+         }
+         .text-green-800 {
+            --tw-text-opacity: 1;
+            color: rgb(22 101 52 / var(--tw-text-opacity, 1));
+         }
+         .text-red-800 {
+            --tw-text-opacity: 1;
+            color: rgb(153 27 27 / var(--tw-text-opacity, 1));
+         }
+         .text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+         }
+         .text-yellow-800 {
+            --tw-text-opacity: 1;
+            color: rgb(133 77 14 / var(--tw-text-opacity, 1));
+         }
+         .transition {
+            transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color,
+               -webkit-backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+         }
+         .duration-300 {
+            transition-duration: 300ms;
+         }
+         .hover\:bg-blue-700:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1));
+         }
+         .hover\:bg-gray-100:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+         }
+         .hover\:text-blue-800:hover {
+            --tw-text-opacity: 1;
+            color: rgb(30 64 175 / var(--tw-text-opacity, 1));
+         }
+         .focus\:outline-none:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+         }
+         .focus\:ring-2:focus {
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+         }
+         .focus\:ring-blue-500:focus {
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
+         }
+      </style>
+   </head>
+   <body class="bg-white min-h-screen">
+      <div class="container mx-auto px-4 py-6 max-w-6xl">
+         <!-- Header -->
+         <header class="mb-6">
             <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800">Maintenance Report</h1>
-                    <p class="text-gray-600 mt-1">Report campus maintenance issues</p>
-                </div>
-                <div class="bg-blue-50 p-2 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                </div>
+               <div>
+                  <h1 class="text-2xl font-bold text-gray-800">Maintenance Report</h1>
+                  <p class="text-gray-600 mt-1">Report campus maintenance issues</p>
+               </div>
+               <div class="bg-blue-50 p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+               </div>
             </div>
-        </header>
+         </header>
 
-        <!-- Main Content -->
-        <div class="mb-20">
+         <!-- Main Content -->
+         <div class="mb-20">
             <!-- Tabs -->
             <div class="flex border-b border-gray-200 mb-6">
-                <button id="newReportTab" class="tab active flex-1 text-center py-3 font-medium border-b-2 border-blue-500 text-blue-600">
-                    New Report
-                </button>
-                <button id="myReportsTab" class="tab flex-1 text-center py-3 font-medium border-b-2 border-transparent text-gray-500">
-                    My Reports
-                </button>
+               <button id="newReportTab" class="tab active flex-1 text-center py-3 font-medium border-b-2 border-blue-500 text-blue-600">New Report</button>
+               <button id="myReportsTab" class="tab flex-1 text-center py-3 font-medium border-b-2 border-transparent text-gray-500">My Reports</button>
             </div>
 
             <!-- New Report Form -->
             <div id="newReportForm" class="slide-in">
-                <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Report Details</h2>
-                    
-                    <!-- Building Selection -->
-                    <div class="mb-4">
-                        <label for="building" class="block text-sm font-medium text-gray-700 mb-1">Building</label>
-                        <div class="relative">
-                            <select id="building" class="form-input block w-full pl-3 pr-10 py-3 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
-                                <option value="" disabled="" selected="">Select a building</option>
-                                <option value="science">Science Building</option>
-                                <option value="library">Library</option>
-                                <option value="student-union">Student Union</option>
-                                <option value="engineering">Engineering Building</option>
-                                <option value="arts">Arts Center</option>
-                                <option value="dorm-a">Dormitory A</option>
-                                <option value="dorm-b">Dormitory B</option>
-                                <option value="sports">Sports Complex</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Location Selection -->
-                    <div class="mb-4">
-                        <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Specific Location</label>
-                        <div class="relative">
-                            <select id="location" class="form-input block w-full pl-3 pr-10 py-3 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
-                                <option value="" disabled="" selected="">Select a location</option>
-                                <option value="classroom">Classroom</option>
-                                <option value="hallway">Hallway</option>
-                                <option value="bathroom">Bathroom</option>
-                                <option value="lobby">Lobby</option>
-                                <option value="stairwell">Stairwell</option>
-                                <option value="elevator">Elevator</option>
-                                <option value="outdoor">Outdoor Area</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Issue Type -->
-                    <div class="mb-4">
-                        <label for="issueType" class="block text-sm font-medium text-gray-700 mb-1">Issue Type</label>
-                        <div class="relative">
-                            <select id="issueType" class="form-input block w-full pl-3 pr-10 py-3 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
-                                <option value="" disabled="" selected="">Select issue type</option>
-                                <option value="plumbing">Plumbing</option>
-                                <option value="electrical">Electrical</option>
-                                <option value="hvac">HVAC/Temperature</option>
-                                <option value="structural">Structural</option>
-                                <option value="cleaning">Cleaning</option>
-                                <option value="furniture">Furniture</option>
-                                <option value="technology">Technology</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Priority Level -->
-                    <div class="mb-4">
-                        <label for="priority" class="block text-sm font-medium text-gray-700 mb-1">Priority Level</label>
-                        <div class="relative">
-                            <select id="priority" class="form-input block w-full pl-3 pr-10 py-3 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
-                                <option value="" disabled="" selected="">Select priority</option>
-                                <option value="low">Low - Not Urgent</option>
-                                <option value="medium">Medium - Needs Attention</option>
-                                <option value="high">High - Urgent Issue</option>
-                                <option value="emergency">Emergency - Immediate Action Required</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="mb-4">
-                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <textarea id="description" rows="4" class="form-input block w-full px-3 py-3 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Please describe the issue in detail..."></textarea>
-                    </div>
-                    
-                    <!-- Image Upload -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Upload Images (Optional)</label>
-                        <div class="flex items-center justify-center w-full">
-                            <label for="imageUpload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition duration-300">
-                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="mb-3 h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                    <p class="mb-1 text-sm text-gray-500">Click to upload images</p>
-                                    <p class="text-xs text-gray-500">PNG, JPG up to 5MB</p>
-                                </div>
-                                <input id="imageUpload" type="file" class="hidden" accept="image/*" multiple="">
-                            </label>
-                        </div>
-                        <div id="imagePreviewContainer" class="hidden mt-3 flex flex-wrap gap-2"></div>
-                    </div>
-                    
-                    <!-- Submit Button -->
-                    <button id="submitReport" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition duration-300 flex items-center justify-center">
-                        Submit Report
-                    </button>
-                </div>
+               <form id="reportForm" method="POST" enctype="multipart/form-data" action="/api/issues/">
+                  <h2 class="text-lg font-semibold text-gray-800 mb-4">Report Details</h2>
+
+                  <!-- Building Selection -->
+                  <div class="mb-4">
+                     <label for="building" class="block text-sm font-medium text-gray-700 mb-1">Building</label>
+                     <div class="relative">
+                        <select id="building" name="building" class="form-input block w-full ...">
+                           <option value="" disabled selected>Select a building</option>
+                           <option value="science">Science Building</option>
+                           <option value="library">Library</option>
+                           <option value="student-union">Student Union</option>
+                           <option value="engineering">Engineering Building</option>
+                           <option value="arts">Arts Center</option>
+                           <option value="dorm-a">Dormitory A</option>
+                           <option value="dorm-b">Dormitory B</option>
+                           <option value="sports">Sports Complex</option>
+                        </select>
+                     </div>
+                  </div>
+
+                  <!-- Location Selection -->
+                  <div class="mb-4">
+                     <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Specific Location</label>
+                     <div class="relative">
+                        <select id="location" name="location" class="form-input block w-full ...">
+                           <option value="" disabled selected>Select a location</option>
+                           <option value="classroom">Classroom</option>
+                           <option value="hallway">Hallway</option>
+                           <option value="bathroom">Bathroom</option>
+                           <option value="lobby">Lobby</option>
+                           <option value="stairwell">Stairwell</option>
+                           <option value="elevator">Elevator</option>
+                           <option value="outdoor">Outdoor Area</option>
+                        </select>
+                     </div>
+                  </div>
+
+                  <!-- Issue Type -->
+                  <div class="mb-4">
+                     <label for="issueType" class="block text-sm font-medium text-gray-700 mb-1">Issue Type</label>
+                     <div class="relative">
+                        <select id="issueType" name="issue_type" class="form-input block w-full ...">
+                           <option value="" disabled selected>Select issue type</option>
+                           <option value="plumbing">Plumbing</option>
+                           <option value="electrical">Electrical</option>
+                           <option value="hvac">HVAC/Temperature</option>
+                           <option value="structural">Structural</option>
+                           <option value="cleaning">Cleaning</option>
+                           <option value="furniture">Furniture</option>
+                           <option value="technology">Technology</option>
+                           <option value="other">Other</option>
+                        </select>
+                     </div>
+                  </div>
+
+                  <!-- Priority Level -->
+                  <div class="mb-4">
+                     <label for="priority" class="block text-sm font-medium text-gray-700 mb-1">Priority Level</label>
+                     <div class="relative">
+                        <select id="priority" name="priority" class="form-input block w-full ...">
+                           <option value="" disabled selected>Select priority</option>
+                           <option value="low">Low - Not Urgent</option>
+                           <option value="medium">Medium - Needs Attention</option>
+                           <option value="high">High - Urgent Issue</option>
+                           <option value="emergency">Emergency - Immediate Action Required</option>
+                        </select>
+                     </div>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="mb-4">
+                     <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                     <textarea id="description" name="description" rows="4" class="form-input block w-full ..." placeholder="Please describe the issue in detail..."></textarea>
+                  </div>
+
+                  <!-- Image Upload -->
+                  <div class="mb-6">
+                     <label class="block text-sm font-medium text-gray-700 mb-1">Upload Images (Optional)</label>
+                     <div class="flex items-center justify-center w-full">
+                        <label
+                           for="imageUpload"
+                           class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition duration-300"
+                        >
+                           <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="mb-3 h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                 />
+                              </svg>
+                              <p class="mb-1 text-sm text-gray-500">Click to upload images</p>
+                              <p class="text-xs text-gray-500">PNG, JPG up to 5MB</p>
+                           </div>
+                           <input id="imageUpload" name="image" type="file" class="hidden" accept="image/*" />
+                        </label>
+                     </div>
+                     <div id="imagePreviewContainer" class="hidden mt-3 flex flex-wrap gap-2"></div>
+                  </div>
+
+                  <!-- Submit Button -->
+                  <button id="submitReport" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition duration-300 flex items-center justify-center">
+                     Submit Report
+                  </button>
+               </form>
             </div>
 
             <!-- Submission Confirmation (Hidden by default) -->
             <div id="submissionConfirmation" class="hidden fade-in bg-green-50 border border-green-200 rounded-xl p-6 mb-6 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Report Submitted Successfully!</h3>
-                <p class="text-gray-600 mb-4">Your maintenance report has been submitted. You can track its status in the "My Reports" tab.</p>
-                <p class="text-sm text-gray-500 mb-4">Report ID: <span class="font-medium">MR-2023-0542</span></p>
-                <button id="newReportButton" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
-                    Submit Another Report
-                </button>
+               <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+               </div>
+               <h3 class="text-lg font-semibold text-gray-800 mb-2">Report Submitted Successfully!</h3>
+               <p class="text-gray-600 mb-4">Your maintenance report has been submitted. You can track its status in the "My Reports" tab.</p>
+               <p class="text-sm text-gray-500 mb-4">Report ID: <span class="font-medium">MR-2023-0542</span></p>
+               <button id="newReportButton" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">Submit Another Report</button>
             </div>
 
             <!-- My Reports (Hidden by default) -->
             <div id="myReportsContent" class="hidden slide-in">
-                <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">My Recent Reports</h2>
-                    
-                    <!-- Status Item 1 -->
-                    <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">In Progress</span>
-                                    <span class="text-sm text-gray-500">May 15, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-800">Broken Light Fixture</h3>
-                                <p class="text-sm text-gray-600 mt-1">Science Building, Room 302</p>
-                            </div>
-                            <span class="text-xs font-medium text-blue-600">MR-2023-0541</span>
+               <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+                  <h2 class="text-lg font-semibold text-gray-800 mb-4">My Recent Reports</h2>
+
+                  <!-- Status Item 1 -->
+                  <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                     <div class="flex justify-between items-start">
+                        <div>
+                           <div class="flex items-center mb-1">
+                              <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">In Progress</span>
+                              <span class="text-sm text-gray-500">May 15, 2023</span>
+                           </div>
+                           <h3 class="font-medium text-gray-800">Broken Light Fixture</h3>
+                           <p class="text-sm text-gray-600 mt-1">Science Building, Room 302</p>
                         </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                    Scheduled: May 17, 2023
-                                </div>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-                            </div>
+                        <span class="text-xs font-medium text-blue-600">MR-2023-0541</span>
+                     </div>
+                     <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="flex justify-between items-center">
+                           <div class="flex items-center text-sm text-gray-500">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                 ></path>
+                              </svg>
+                              Scheduled: May 17, 2023
+                           </div>
+                           <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
                         </div>
-                    </div>
-                    
-                    <!-- Status Item 2 -->
-                    <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Completed</span>
-                                    <span class="text-sm text-gray-500">May 10, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-800">Leaking Faucet</h3>
-                                <p class="text-sm text-gray-600 mt-1">Dormitory A, 2nd Floor Bathroom</p>
-                            </div>
-                            <span class="text-xs font-medium text-blue-600">MR-2023-0532</span>
+                     </div>
+                  </div>
+
+                  <!-- Status Item 2 -->
+                  <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                     <div class="flex justify-between items-start">
+                        <div>
+                           <div class="flex items-center mb-1">
+                              <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Completed</span>
+                              <span class="text-sm text-gray-500">May 10, 2023</span>
+                           </div>
+                           <h3 class="font-medium text-gray-800">Leaking Faucet</h3>
+                           <p class="text-sm text-gray-600 mt-1">Dormitory A, 2nd Floor Bathroom</p>
                         </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Resolved: May 12, 2023
-                                </div>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-                            </div>
+                        <span class="text-xs font-medium text-blue-600">MR-2023-0532</span>
+                     </div>
+                     <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="flex justify-between items-center">
+                           <div class="flex items-center text-sm text-gray-500">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                              </svg>
+                              Resolved: May 12, 2023
+                           </div>
+                           <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
                         </div>
-                    </div>
-                    
-                    <!-- Status Item 3 -->
-                    <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Pending</span>
-                                    <span class="text-sm text-gray-500">May 14, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-800">Broken Chair</h3>
-                                <p class="text-sm text-gray-600 mt-1">Library, 3rd Floor Study Area</p>
-                            </div>
-                            <span class="text-xs font-medium text-blue-600">MR-2023-0539</span>
+                     </div>
+                  </div>
+
+                  <!-- Status Item 3 -->
+                  <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                     <div class="flex justify-between items-start">
+                        <div>
+                           <div class="flex items-center mb-1">
+                              <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Pending</span>
+                              <span class="text-sm text-gray-500">May 14, 2023</span>
+                           </div>
+                           <h3 class="font-medium text-gray-800">Broken Chair</h3>
+                           <p class="text-sm text-gray-600 mt-1">Library, 3rd Floor Study Area</p>
                         </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Awaiting review
-                                </div>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-                            </div>
+                        <span class="text-xs font-medium text-blue-600">MR-2023-0539</span>
+                     </div>
+                     <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="flex justify-between items-center">
+                           <div class="flex items-center text-sm text-gray-500">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                              </svg>
+                              Awaiting review
+                           </div>
+                           <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
                         </div>
-                    </div>
-                    
-                    <!-- Status Item 4 -->
-                    <div class="status-item bg-white border border-gray-200 rounded-lg p-4">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Assigned</span>
-                                    <span class="text-sm text-gray-500">May 13, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-800">Wi-Fi Connectivity Issue</h3>
-                                <p class="text-sm text-gray-600 mt-1">Student Union, Main Hall</p>
-                            </div>
-                            <span class="text-xs font-medium text-blue-600">MR-2023-0536</span>
+                     </div>
+                  </div>
+
+                  <!-- Status Item 4 -->
+                  <div class="status-item bg-white border border-gray-200 rounded-lg p-4">
+                     <div class="flex justify-between items-start">
+                        <div>
+                           <div class="flex items-center mb-1">
+                              <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">Assigned</span>
+                              <span class="text-sm text-gray-500">May 13, 2023</span>
+                           </div>
+                           <h3 class="font-medium text-gray-800">Wi-Fi Connectivity Issue</h3>
+                           <p class="text-sm text-gray-600 mt-1">Student Union, Main Hall</p>
                         </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                    Assigned to: IT Support
-                                </div>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-                            </div>
+                        <span class="text-xs font-medium text-blue-600">MR-2023-0536</span>
+                     </div>
+                     <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="flex justify-between items-center">
+                           <div class="flex items-center text-sm text-gray-500">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                              </svg>
+                              Assigned to: IT Support
+                           </div>
+                           <button class="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
                         </div>
-                    </div>
-                </div>
+                     </div>
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
+         </div>
+      </div>
 
-    <!-- Bottom Navigation Bar -->
-    {% include "partials/bottom_nav.html" with active="notifications" %}
+      <!-- Bottom Navigation Bar -->
+      {% include "partials/bottom_nav.html" with active="notifications" %}
 
-    <script>
-        // Tab switching functionality
-        document.getElementById('newReportTab').addEventListener('click', function() {
-            // Update tab styling
-            this.classList.add('active', 'border-blue-500', 'text-blue-600');
-            this.classList.remove('border-transparent', 'text-gray-500');
-            
-            const myReportsTab = document.getElementById('myReportsTab');
-            myReportsTab.classList.remove('active', 'border-blue-500', 'text-blue-600');
-            myReportsTab.classList.add('border-transparent', 'text-gray-500');
-            
-            // Show new report form, hide my reports
-            document.getElementById('newReportForm').classList.remove('hidden');
-            document.getElementById('myReportsContent').classList.add('hidden');
-            document.getElementById('submissionConfirmation').classList.add('hidden');
-        });
-        
-        document.getElementById('myReportsTab').addEventListener('click', function() {
-            // Update tab styling
-            this.classList.add('active', 'border-blue-500', 'text-blue-600');
-            this.classList.remove('border-transparent', 'text-gray-500');
-            
-            const newReportTab = document.getElementById('newReportTab');
-            newReportTab.classList.remove('active', 'border-blue-500', 'text-blue-600');
-            newReportTab.classList.add('border-transparent', 'text-gray-500');
-            
-            // Show my reports, hide new report form and confirmation
-            document.getElementById('myReportsContent').classList.remove('hidden');
-            document.getElementById('newReportForm').classList.add('hidden');
-            document.getElementById('submissionConfirmation').classList.add('hidden');
-        });
-        
-        // Image upload preview
-        document.getElementById('imageUpload').addEventListener('change', function(event) {
+      <script>
+         // CSRF token'ı <meta name="csrf-token">'dan al
+         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+         // Tab switching
+         document.getElementById("newReportTab").addEventListener("click", function () {
+            this.classList.add("active", "border-blue-500", "text-blue-600");
+            this.classList.remove("border-transparent", "text-gray-500");
+
+            const myReportsTab = document.getElementById("myReportsTab");
+            myReportsTab.classList.remove("active", "border-blue-500", "text-blue-600");
+            myReportsTab.classList.add("border-transparent", "text-gray-500");
+
+            document.getElementById("newReportForm").classList.remove("hidden");
+            document.getElementById("myReportsContent").classList.add("hidden");
+            document.getElementById("submissionConfirmation").classList.add("hidden");
+         });
+
+         document.getElementById("myReportsTab").addEventListener("click", function () {
+            this.classList.add("active", "border-blue-500", "text-blue-600");
+            this.classList.remove("border-transparent", "text-gray-500");
+
+            const newReportTab = document.getElementById("newReportTab");
+            newReportTab.classList.remove("active", "border-blue-500", "text-blue-600");
+            newReportTab.classList.add("border-transparent", "text-gray-500");
+
+            document.getElementById("myReportsContent").classList.remove("hidden");
+            document.getElementById("newReportForm").classList.add("hidden");
+            document.getElementById("submissionConfirmation").classList.add("hidden");
+
+            loadMyReports(); // 🔥 yeni eklenen fonksiyon
+         });
+
+         // Image upload preview
+         document.getElementById("imageUpload").addEventListener("change", function (event) {
             const files = event.target.files;
-            const previewContainer = document.getElementById('imagePreviewContainer');
-            
+            const previewContainer = document.getElementById("imagePreviewContainer");
+
             if (files.length > 0) {
-                previewContainer.classList.remove('hidden');
-                previewContainer.innerHTML = '';
-                
-                for (let i = 0; i < Math.min(files.length, 3); i++) {
-                    const file = files[i];
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        const previewDiv = document.createElement('div');
-                        previewDiv.className = 'relative';
-                        
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'h-20 w-20 object-cover rounded-lg';
-                        
-                        const removeBtn = document.createElement('button');
-                        removeBtn.className = 'absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center';
-                        removeBtn.innerHTML = '×';
-                        removeBtn.onclick = function() {
-                            previewDiv.remove();
-                            if (previewContainer.children.length === 0) {
-                                previewContainer.classList.add('hidden');
-                            }
-                        };
-                        
-                        previewDiv.appendChild(img);
-                        previewDiv.appendChild(removeBtn);
-                        previewContainer.appendChild(previewDiv);
-                    };
-                    
-                    reader.readAsDataURL(file);
-                }
+               previewContainer.classList.remove("hidden");
+               previewContainer.innerHTML = "";
+
+               for (let i = 0; i < Math.min(files.length, 3); i++) {
+                  const file = files[i];
+                  const reader = new FileReader();
+
+                  reader.onload = function (e) {
+                     const previewDiv = document.createElement("div");
+                     previewDiv.className = "relative";
+
+                     const img = document.createElement("img");
+                     img.src = e.target.result;
+                     img.className = "h-20 w-20 object-cover rounded-lg";
+
+                     const removeBtn = document.createElement("button");
+                     removeBtn.className = "absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center";
+                     removeBtn.innerHTML = "×";
+                     removeBtn.onclick = function () {
+                        previewDiv.remove();
+                        if (previewContainer.children.length === 0) {
+                           previewContainer.classList.add("hidden");
+                        }
+                     };
+
+                     previewDiv.appendChild(img);
+                     previewDiv.appendChild(removeBtn);
+                     previewContainer.appendChild(previewDiv);
+                  };
+
+                  reader.readAsDataURL(file);
+               }
             }
-        });
-        
-        // Form submission
-        document.getElementById('submitReport').addEventListener('click', function() {
-            // Simple validation
-            const building = document.getElementById('building').value;
-            const location = document.getElementById('location').value;
-            const issueType = document.getElementById('issueType').value;
-            const description = document.getElementById('description').value;
-            
-            if (!building || !location || !issueType || !description) {
-                alert('Please fill in all required fields.');
-                return;
+         });
+
+         // Form submission
+         document.getElementById("submitReport").addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const form = document.getElementById("reportForm");
+            const formData = new FormData(form);
+
+            const requiredFields = ["building", "location", "issue_type", "priority", "description"];
+            for (const field of requiredFields) {
+               if (!formData.get(field)) {
+                  alert("Please fill in all required fields.");
+                  return;
+               }
             }
-            
-            // Show confirmation
-            document.getElementById('newReportForm').classList.add('hidden');
-            document.getElementById('submissionConfirmation').classList.remove('hidden');
-        });
-        
-        // New report button in confirmation
-        document.getElementById('newReportButton').addEventListener('click', function() {
-            // Reset form
-            document.getElementById('building').selectedIndex = 0;
-            document.getElementById('location').selectedIndex = 0;
-            document.getElementById('issueType').selectedIndex = 0;
-            document.getElementById('priority').selectedIndex = 0;
-            document.getElementById('description').value = '';
-            document.getElementById('imageUpload').value = '';
-            document.getElementById('imagePreviewContainer').innerHTML = '';
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
-            
-            // Show form again
-            document.getElementById('submissionConfirmation').classList.add('hidden');
-            document.getElementById('newReportForm').classList.remove('hidden');
-        });
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d35d9d64beb697',t:'MTc0NjgxNjQ1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
-</body></html>
+
+            fetch("/api/issues/", {
+               method: "POST",
+               body: formData,
+               headers: {
+                  "X-CSRFToken": csrfToken,
+               },
+               credentials: "include",
+            })
+               .then((response) => {
+                  if (!response.ok) throw new Error("Something went wrong!");
+                  return response.json();
+               })
+               .then((data) => {
+                  document.getElementById("newReportForm").classList.add("hidden");
+                  document.getElementById("submissionConfirmation").classList.remove("hidden");
+
+                  if (data.report_id) {
+                     const span = document.querySelector("#submissionConfirmation span.font-medium");
+                     if (span) span.textContent = data.report_id;
+                  }
+               })
+               .catch((error) => {
+                  alert("Submission failed: " + error.message);
+               });
+         });
+
+         // Reset form on "Submit Another Report"
+         document.getElementById("newReportButton").addEventListener("click", function () {
+            document.getElementById("building").selectedIndex = 0;
+            document.getElementById("location").selectedIndex = 0;
+            document.getElementById("issueType").selectedIndex = 0;
+            document.getElementById("priority").selectedIndex = 0;
+            document.getElementById("description").value = "";
+            document.getElementById("imageUpload").value = "";
+            document.getElementById("imagePreviewContainer").innerHTML = "";
+            document.getElementById("imagePreviewContainer").classList.add("hidden");
+
+            document.getElementById("submissionConfirmation").classList.add("hidden");
+            document.getElementById("newReportForm").classList.remove("hidden");
+         });
+
+         // 🔥 Load user's own reports dynamically
+         function loadMyReports() {
+            fetch("/api/issues/", {
+               method: "GET",
+               credentials: "include",
+               headers: { Accept: "application/json" },
+            })
+               .then((res) => res.json())
+               .then((data) => {
+                  const container = document.getElementById("myReportsContent");
+                  const listContainer = container.querySelector(".bg-white.rounded-xl");
+                  listContainer.innerHTML = `<h2 class="text-lg font-semibold text-gray-800 mb-4">My Recent Reports</h2>`;
+
+                  if (data.length === 0) {
+                     listContainer.innerHTML += '<p class="text-gray-500">No reports found.</p>';
+                     return;
+                  }
+
+                  data.forEach((report) => {
+                     const statusMap = {
+                        pending: { label: "Pending", cls: "bg-red-100 text-red-800" },
+                        in_progress: { label: "In Progress", cls: "bg-yellow-100 text-yellow-800" },
+                        completed: { label: "Completed", cls: "bg-green-100 text-green-800" },
+                        assigned: { label: "Assigned", cls: "bg-blue-100 text-blue-800" },
+                     };
+                     const status = statusMap[report.status] || { label: report.status, cls: "bg-gray-100 text-gray-800" };
+
+                     const formattedDate = new Date(report.reported_at).toLocaleDateString();
+
+                     listContainer.innerHTML += `
+                       <div class="status-item bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                          <div class="flex justify-between items-start">
+                             <div>
+                                <div class="flex items-center mb-1">
+                                   <span class="${status.cls} text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">${status.label}</span>
+                                   <span class="text-sm text-gray-500">${formattedDate}</span>
+                                </div>
+                                <h3 class="font-medium text-gray-800">${report.issue_type}</h3>
+                                <p class="text-sm text-gray-600 mt-1">${report.building}, ${report.location}</p>
+                             </div>
+                             <span class="text-xs font-medium text-blue-600">#${report.id}</span>
+                          </div>
+                       </div>
+                    `;
+                  });
+               })
+               .catch((err) => {
+                  alert("Failed to load reports: " + err.message);
+               });
+         }
+      </script>
+   </body>
+</html>
