@@ -11,4 +11,5 @@ urlpatterns = [
     path('report-issue/', views.report_issue, name='report_issue'),
     path('reserve/', views.room_reservation, name='room_reservation'),
     path('make-reservation/', views.make_reservation, name='make_reservation'),  # ✅ Bu satırı ekledik
+    path('profile/', views.profile, name='profile'),
 ]

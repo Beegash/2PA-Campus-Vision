@@ -769,231 +769,194 @@
          }
       </style>
    </head>
-   <body class="bg-pattern min-h-screen pb-20">
-      <div class="gradient-bg absolute inset-0 z-0"></div>
+   <body class="min-h-screen flex flex-col bg-pattern">
+      <div class="relative z-10 flex-1 pb-20">
+         <div class="container mx-auto px-4 py-8 max-w-2xl relative z-10">
+            <div class="profile-container">
+               <!-- Header with Back Button -->
+               <div class="flex items-center mb-6">
+                  <button class="p-2 rounded-full hover:bg-gray-100 mr-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                     </svg>
+                  </button>
+                  <h1 class="text-2xl font-bold text-gray-800">My Profile</h1>
+               </div>
 
-      <div class="container mx-auto px-4 py-8 max-w-2xl relative z-10">
-         <div class="profile-container">
-            <!-- Header with Back Button -->
-            <div class="flex items-center mb-6">
-               <button class="p-2 rounded-full hover:bg-gray-100 mr-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+               <!-- Profile Photo and Name -->
+               <div class="flex flex-col items-center mb-8">
+                  <div class="relative mb-4">
+                     <div class="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-md profile-photo cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                     </div>
+                     <div class="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 shadow-md cursor-pointer hover:bg-blue-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                           ></path>
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                     </div>
+                  </div>
+                  <h2 class="text-xl font-semibold text-gray-800">Alex Johnson</h2>
+                  <div class="flex items-center mt-1">
+                     <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Student</span>
+                  </div>
+               </div>
+
+               <!-- Student Information Card -->
+               <div class="section-card bg-white rounded-xl shadow-md p-6 mb-6">
+                  <h3 class="text-lg font-semibold text-gray-800 mb-4">Student Information</h3>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div>
+                        <p class="text-sm text-gray-500 mb-1">Student ID</p>
+                        <p class="font-medium text-gray-800">STU-2025-10042</p>
+                     </div>
+                     <div>
+                        <p class="text-sm text-gray-500 mb-1">Department</p>
+                        <p class="font-medium text-gray-800">Computer Science</p>
+                     </div>
+                     <div>
+                        <p class="text-sm text-gray-500 mb-1">Program</p>
+                        <p class="font-medium text-gray-800">Bachelor of Science</p>
+                     </div>
+                     <div>
+                        <p class="text-sm text-gray-500 mb-1">Year</p>
+                        <p class="font-medium text-gray-800">3rd Year</p>
+                     </div>
+                     <div>
+                        <p class="text-sm text-gray-500 mb-1">Email Address</p>
+                        <p class="font-medium text-gray-800">alex.johnson@university.edu</p>
+                     </div>
+                     <div>
+                        <p class="text-sm text-gray-500 mb-1">Phone Number</p>
+                        <p class="font-medium text-gray-800">(555) 123-4567</p>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Password Change Card -->
+               <div class="section-card bg-white rounded-xl shadow-md p-6 mb-6">
+                  <h3 class="text-lg font-semibold text-gray-800 mb-4">Change Password</h3>
+
+                  <form>
+                     <div class="mb-4">
+                        <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                        <div class="relative">
+                           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                 ></path>
+                              </svg>
+                           </div>
+                           <input id="currentPassword" type="password" class="input-field block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none" placeholder="••••••••" />
+                           <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                              <button type="button" class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path
+                                       stroke-linecap="round"
+                                       stroke-linejoin="round"
+                                       stroke-width="2"
+                                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                    ></path>
+                                 </svg>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="mb-4">
+                        <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                        <div class="relative">
+                           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                 ></path>
+                              </svg>
+                           </div>
+                           <input id="newPassword" type="password" class="input-field block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none" placeholder="••••••••" />
+                           <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                              <button type="button" class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path
+                                       stroke-linecap="round"
+                                       stroke-linejoin="round"
+                                       stroke-width="2"
+                                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                    ></path>
+                                 </svg>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="mb-4">
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                        <div class="relative">
+                           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                 ></path>
+                              </svg>
+                           </div>
+                           <input id="confirmPassword" type="password" class="input-field block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none" placeholder="••••••••" />
+                           <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                              <button type="button" class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path
+                                       stroke-linecap="round"
+                                       stroke-linejoin="round"
+                                       stroke-width="2"
+                                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                    ></path>
+                                 </svg>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+
+               <!-- Update Profile Button -->
+               <button type="button" class="update-button w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg shadow transition duration-300 mb-6">Update Profile</button>
+
+               <!-- Logout Button -->
+               <button
+                  onclick="window.location.href='{% url 'logout' %}'"
+                  type="button"
+                  class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-lg shadow-sm transition duration-300 flex items-center justify-center"
+               >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                   </svg>
+                  Logout
                </button>
-               <h1 class="text-2xl font-bold text-gray-800">My Profile</h1>
-            </div>
-
-            <!-- Profile Photo and Name -->
-            <div class="flex flex-col items-center mb-8">
-               <div class="relative mb-4">
-                  <div class="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-md profile-photo cursor-pointer">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                     </svg>
-                  </div>
-                  <div class="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 shadow-md cursor-pointer hover:bg-blue-600 transition-colors">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path
-                           stroke-linecap="round"
-                           stroke-linejoin="round"
-                           stroke-width="2"
-                           d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                        ></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                     </svg>
-                  </div>
-               </div>
-               <h2 class="text-xl font-semibold text-gray-800">Alex Johnson</h2>
-               <div class="flex items-center mt-1">
-                  <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Student</span>
-               </div>
-            </div>
-
-            <!-- Student Information Card -->
-            <div class="section-card bg-white rounded-xl shadow-md p-6 mb-6">
-               <h3 class="text-lg font-semibold text-gray-800 mb-4">Student Information</h3>
-
-               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                     <p class="text-sm text-gray-500 mb-1">Student ID</p>
-                     <p class="font-medium text-gray-800">STU-2025-10042</p>
-                  </div>
-                  <div>
-                     <p class="text-sm text-gray-500 mb-1">Department</p>
-                     <p class="font-medium text-gray-800">Computer Science</p>
-                  </div>
-                  <div>
-                     <p class="text-sm text-gray-500 mb-1">Program</p>
-                     <p class="font-medium text-gray-800">Bachelor of Science</p>
-                  </div>
-                  <div>
-                     <p class="text-sm text-gray-500 mb-1">Year</p>
-                     <p class="font-medium text-gray-800">3rd Year</p>
-                  </div>
-                  <div>
-                     <p class="text-sm text-gray-500 mb-1">Email Address</p>
-                     <p class="font-medium text-gray-800">alex.johnson@university.edu</p>
-                  </div>
-                  <div>
-                     <p class="text-sm text-gray-500 mb-1">Phone Number</p>
-                     <p class="font-medium text-gray-800">(555) 123-4567</p>
-                  </div>
-               </div>
-            </div>
-
-            <!-- Password Change Card -->
-            <div class="section-card bg-white rounded-xl shadow-md p-6 mb-6">
-               <h3 class="text-lg font-semibold text-gray-800 mb-4">Change Password</h3>
-
-               <form>
-                  <div class="mb-4">
-                     <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path
-                                 stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 stroke-width="2"
-                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                              ></path>
-                           </svg>
-                        </div>
-                        <input id="currentPassword" type="password" class="input-field block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none" placeholder="••••••••" />
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                           <button type="button" class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                 <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                 ></path>
-                              </svg>
-                           </button>
-                        </div>
-                     </div>
-                  </div>
-
-                  <div class="mb-4">
-                     <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path
-                                 stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 stroke-width="2"
-                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                              ></path>
-                           </svg>
-                        </div>
-                        <input id="newPassword" type="password" class="input-field block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none" placeholder="••••••••" />
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                           <button type="button" class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                 <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                 ></path>
-                              </svg>
-                           </button>
-                        </div>
-                     </div>
-                  </div>
-
-                  <div class="mb-4">
-                     <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path
-                                 stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 stroke-width="2"
-                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                              ></path>
-                           </svg>
-                        </div>
-                        <input id="confirmPassword" type="password" class="input-field block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none" placeholder="••••••••" />
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                           <button type="button" class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                 <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                 ></path>
-                              </svg>
-                           </button>
-                        </div>
-                     </div>
-                  </div>
-               </form>
-            </div>
-
-            <!-- Update Profile Button -->
-            <button type="button" class="update-button w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg shadow transition duration-300 mb-6">Update Profile</button>
-
-            <!-- Logout Button -->
-            <button
-               type="button"
-               class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-lg shadow-sm transition duration-300 flex items-center justify-center"
-            >
-               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-               </svg>
-               Logout
-            </button>
-         </div>
-      </div>
-
-      <!-- Bottom Navigation Bar -->
-      <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2">
-         <div class="flex justify-around items-center max-w-md mx-auto">
-            <div class="nav-item flex flex-col items-center p-2">
-               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                     stroke-linecap="round"
-                     stroke-linejoin="round"
-                     stroke-width="2"
-                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  ></path>
-               </svg>
-               <span class="text-xs mt-1 text-gray-500">Home</span>
-            </div>
-            <div class="nav-item flex flex-col items-center p-2">
-               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-               </svg>
-               <span class="text-xs mt-1 text-gray-500">Schedule</span>
-            </div>
-            <div class="nav-item flex flex-col items-center p-2">
-               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                     stroke-linecap="round"
-                     stroke-linejoin="round"
-                     stroke-width="2"
-                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                  ></path>
-               </svg>
-               <span class="text-xs mt-1 text-gray-500">Courses</span>
-            </div>
-            <div class="nav-item active flex flex-col items-center p-2">
-               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-               </svg>
-               <span class="text-xs mt-1 text-blue-600">Profile</span>
             </div>
          </div>
       </div>
+
+      <div class="gradient-bg absolute inset-0 z-0"></div>
 
       <script>
          // Toggle password visibility
@@ -1065,39 +1028,7 @@
             alert("This would open a file picker to change your profile photo");
          });
       </script>
-      <script>
-         (function () {
-            function c() {
-               var b = a.contentDocument || a.contentWindow.document;
-               if (b) {
-                  var d = b.createElement("script");
-                  d.innerHTML =
-                     "window.__CF$cv$params={r:'93dca3e68398355c',t:'MTc0NjkxMzcwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-                  b.getElementsByTagName("head")[0].appendChild(d);
-               }
-            }
-            if (document.body) {
-               var a = document.createElement("iframe");
-               a.height = 1;
-               a.width = 1;
-               a.style.position = "absolute";
-               a.style.top = 0;
-               a.style.left = 0;
-               a.style.border = "none";
-               a.style.visibility = "hidden";
-               document.body.appendChild(a);
-               if ("loading" !== document.readyState) c();
-               else if (window.addEventListener) document.addEventListener("DOMContentLoaded", c);
-               else {
-                  var e = document.onreadystatechange || function () {};
-                  document.onreadystatechange = function (b) {
-                     e(b);
-                     "loading" !== document.readyState && ((document.onreadystatechange = e), c());
-                  };
-               }
-            }
-         })();
-      </script>
-      <iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden"></iframe>
+      
+      {% include "partials/bottom_nav.html" with active="profile" %}
    </body>
 </html>

@@ -27,6 +27,8 @@ def lost_and_found(request):
 def report_issue(request):
     return render(request, 'report_an_issue.html')
 
+def profile(request):
+    return render(request, 'profile.html')
 
 @csrf_exempt
 def make_reservation(request):
