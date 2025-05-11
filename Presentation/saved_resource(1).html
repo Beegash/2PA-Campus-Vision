@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<!-- saved from url=(0148)https://bb5zs4pf1h3cbybh.canva-hosted-embed.com/codelet/AAEAEGJiNXpzNHBmMWgzY2J5YmgAAAAAAZbEtDNxl6f0RZkAIe2_2TP7Bvie2ptrP7u4uAax-kJG-zIthW4/#slide-1 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusVision - Making Campuses Smarter</title>
+    <link href="./css2" rel="stylesheet">
+    <script src="./saved_resource"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            --secondary-gradient: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #f9fafb;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .slide {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(20px);
+            padding: 2rem;
+            overflow: hidden;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 10;
+        }
+        
+        .gradient-bg {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 90%;
+            width: 600px;
+            margin: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .navigation {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-dot.active {
+            background-color: #4F46E5;
+            border-color: white;
+            transform: scale(1.3);
+        }
+        
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: var(--secondary-gradient);
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--secondary-gradient);
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .diagram-box {
+            position: relative;
+            width: 180px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 1rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .arrow {
+            position: absolute;
+            width: 80px;
+            height: 2px;
+            background: #4F46E5;
+            z-index: 1;
+        }
+        
+        .arrow::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid #4F46E5;
+            border-right: 2px solid #4F46E5;
+            transform: rotate(45deg);
+            right: 0;
+            top: -4px;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+        
+        .control-btn {
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: #f3f4f6;
+            transform: translateY(-2px);
+        }
+        
+        .team-member {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .team-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.absolute{position:absolute}.relative{position:relative}.bottom-0{bottom:0px}.bottom-10{bottom:2.5rem}.left-0{left:0px}.left-10{left:2.5rem}.left-3{left:0.75rem}.right-0{right:0px}.right-10{right:2.5rem}.right-20{right:5rem}.right-3{right:0.75rem}.top-0{top:0px}.top-10{top:2.5rem}.top-20{top:5rem}.top-3{top:0.75rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.mr-4{margin-right:1rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.flex{display:flex}.grid{display:grid}.h-12{height:3rem}.h-16{height:4rem}.h-20{height:5rem}.h-24{height:6rem}.h-4{height:1rem}.h-48{height:12rem}.h-8{height:2rem}.h-96{height:24rem}.w-1\/3{width:33.333333%}.w-12{width:3rem}.w-16{width:4rem}.w-2\/3{width:66.666667%}.w-24{width:6rem}.w-4{width:1rem}.w-8{width:2rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-5xl{max-width:64rem}.flex-1{flex:1 1 0%}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-sm{border-radius:0.125rem}.border{border-width:1px}.border-2{border-width:2px}.border-dashed{border-style:dashed}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-green-500{--tw-border-opacity:1;border-color:rgb(34 197 94 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-opacity-20{--tw-bg-opacity:0.2}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-indigo-50{--tw-gradient-from:#eef2ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(238 242 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-50{--tw-gradient-from:#faf5ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(250 245 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-50{--tw-gradient-to:#eff6ff var(--tw-gradient-to-position)}.to-cyan-50{--tw-gradient-to:#ecfeff var(--tw-gradient-to-position)}.to-indigo-50{--tw-gradient-to:#eef2ff var(--tw-gradient-to-position)}.to-pink-50{--tw-gradient-to:#fdf2f8 var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-4{padding:1rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pl-5{padding-left:1.25rem}.text-center{text-align:center}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-90{opacity:0.9}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}@media (min-width: 768px){.md\:w-1\/2{width:50%}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-2xl{font-size:1.5rem;line-height:2rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-5xl{font-size:3rem;line-height:1}.md\:text-6xl{font-size:3.75rem;line-height:1}.md\:text-7xl{font-size:4.5rem;line-height:1}}</style></head>
+<body>
+    <!-- Navigation Dots -->
+    <div class="navigation" id="navigation"><div class="nav-dot active"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div></div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar" style="width: 8.33333%;"></div>
+    
+    <!-- Controls -->
+    <div class="controls">
+        <button class="control-btn" id="prevBtn" disabled="">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button class="control-btn" id="nextBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+    
+    <!-- Slides -->
+    <div class="slides-container">
+        <!-- Intro Slide -->
+        <section id="slide-1" class="slide gradient-bg active">
+            <div class="floating">
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="60" cy="60" r="58" stroke="white" stroke-width="4"></circle>
+                    <path d="M40 60C40 48.954 48.954 40 60 40C71.046 40 80 48.954 80 60C80 71.046 71.046 80 60 80" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+                    <path d="M60 80V100" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+                    <path d="M50 90H70" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+                    <circle cx="60" cy="30" r="5" fill="white"></circle>
+                </svg>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mt-8 mb-4 text-center">CampusVision</h1>
+            <p class="text-xl md:text-2xl opacity-90 text-center">Dijital Kampüsler</p>
+        </section>
+        
+        <!-- Problem Slide -->
+        <section id="slide-2" class="slide">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 gradient-text">Kampüste Karşılaşılan Zorluklar</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Aşırı Kalabalık</h3>
+                    <p>Öğrenciler yoğun saatlerde çalışma alanı bulmakta zorlanıyor</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Kayıp Eşyalar</h3>
+                    <p>Değerli eşyalar verimli bir kurtarma sistemi olmadan sıklıkla kayboluyor</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Kaynak Yönetimi</h3>
+                    <p>Verimsiz oda rezervasyon sistemleri kullanılmayan alanlara yol açıyor</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Bakım Sorunları</h3>
+                    <p>Tesis sorunlarının yavaş bildirimi ve çözümü</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Feature 1 -->
+        <section id="slide-3" class="slide">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Doluluk Tespiti</h2>
+            <div class="card max-w-3xl">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 p-4">
+                        <h3 class="text-xl font-semibold mb-3">Gerçek Zamanlı Görüntü İşleme</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Çalışma alanlarında insan, çanta ve sandalye tespiti</li>
+                            <li>Mahremiyet öncelikli teknoloji</li>
+                            <li>Hassas doluluk metrikleri</li>
+                            <li>Öğrencilerin uygun çalışma alanlarını bulmasına yardımcı olur</li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/2 p-4">
+                        <div class="bg-gray-100 rounded-lg p-4 relative h-48">
+                            <div class="absolute top-3 left-3 w-4 h-4 bg-green-500 rounded-full"></div>
+                            <div class="absolute top-3 right-3 w-4 h-4 bg-red-500 rounded-full"></div>
+                            <div class="border-2 border-dashed border-blue-500 rounded-md absolute top-10 left-10 w-16 h-24"></div>
+                            <div class="border-2 border-dashed border-blue-500 rounded-md absolute bottom-10 right-10 w-16 h-24"></div>
+                            <div class="border-2 border-dashed border-green-500 rounded-md absolute top-20 right-20 w-12 h-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Feature 2 -->
+        <section id="slide-4" class="slide">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Akıllı Oda Rezervasyonu</h2>
+            <div class="card max-w-3xl">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 p-4">
+                        <h3 class="text-xl font-semibold mb-3">Sorunsuz Rezervasyon Deneyimi</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Gerçek zamanlı müsaitlik güncellemeleri</li>
+                            <li>Basit rezervasyon akışı</li>
+                            <li>Otomatik giriş/çıkış</li>
+                            <li>Takvim entegrasyonu</li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/2 p-4">
+                        <div class="bg-gray-100 rounded-lg p-4 h-48 flex flex-col">
+                            <div class="flex justify-between mb-2">
+                                <div class="text-sm font-medium">Room 101</div>
+                                <div class="text-sm text-green-600">Available</div>
+                            </div>
+                            <div class="flex space-x-1 mb-3">
+                                <div class="w-8 h-8 bg-blue-500 rounded-sm flex items-center justify-center text-white text-xs">9AM</div>
+                                <div class="w-8 h-8 bg-blue-500 rounded-sm flex items-center justify-center text-white text-xs">10</div>
+                                <div class="w-8 h-8 bg-red-500 rounded-sm flex items-center justify-center text-white text-xs">11</div>
+                                <div class="w-8 h-8 bg-red-500 rounded-sm flex items-center justify-center text-white text-xs">12</div>
+                                <div class="w-8 h-8 bg-blue-500 rounded-sm flex items-center justify-center text-white text-xs">1PM</div>
+                            </div>
+                            <button class="bg-indigo-600 text-white py-2 px-4 rounded-md mt-auto">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Feature 3 -->
+        <section id="slide-5" class="slide">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Ses Seviyesi Sınıflandırması</h2>
+            <div class="card max-w-3xl">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 p-4">
+                        <h3 class="text-xl font-semibold mb-3">Ses Seviyesi Sınıflandırması</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Gerçek zamanlı ses izleme</li>
+                            <li>Mahremiyet öncelikli (kayıt yok)</li>
+                            <li>Ses seviyesi kategorizasyonu</li>
+                            <li>İdeal çalışma ortamınızı bulun</li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/2 p-4">
+                        <div class="bg-gray-100 rounded-lg p-4 h-48">
+                            <div class="mb-4 text-center font-medium">Current Noise Levels</div>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <div class="w-24 text-sm">Library:</div>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                        <div class="bg-green-500 h-4 rounded-full" style="width: 15%"></div>
+                                    </div>
+                                    <div class="ml-2 text-sm">Quiet</div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-24 text-sm">Study Hall:</div>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                        <div class="bg-yellow-500 h-4 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                    <div class="ml-2 text-sm">Moderate</div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-24 text-sm">Cafeteria:</div>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                        <div class="bg-red-500 h-4 rounded-full" style="width: 80%"></div>
+                                    </div>
+                                    <div class="ml-2 text-sm">Loud</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Feature 4 -->
+        <section id="slide-6" class="slide">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                    <path d="M12 9v4"></path>
+                    <path d="M12 17h.01"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Kayıp Eşya Sistemi</h2>
+            <div class="card max-w-3xl">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 p-4">
+                        <h3 class="text-xl font-semibold mb-3">Buluntu Eşya Sistemi</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Görsel ile kayıp veya buluntu eşya bildirimi</li>
+                            <li>Yapay zeka destekli eşya eşleştirme</li>
+                            <li>Eşleşme bildirim sistemi</li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/2 p-4">
+                        <div class="bg-gray-100 rounded-lg p-4 h-48 flex flex-col">
+                            <div class="text-center font-medium mb-2">Report Lost Item</div>
+                            <div class="flex space-x-2 mb-3">
+                                <div class="w-1/3 h-20 bg-gray-200 rounded flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
+                                        <circle cx="12" cy="13" r="3"></circle>
+                                    </svg>
+                                </div>
+                                <div class="w-2/3 flex flex-col space-y-2">
+                                    <input type="text" placeholder="Item name" class="border rounded px-2 py-1 text-sm">
+                                    <input type="text" placeholder="Location" class="border rounded px-2 py-1 text-sm">
+                                </div>
+                            </div>
+                            <button class="bg-indigo-600 text-white py-2 px-4 rounded-md mt-auto text-sm">Submit Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Feature 5 -->
+        <section id="slide-7" class="slide">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Bakım & Onarım Raporlama</h2>
+            <div class="card max-w-3xl">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 p-4">
+                        <h3 class="text-xl font-semibold mb-3">Hızlı Sorun Çözümü</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Ekipman arızalarını anında bildirin</li>
+                            <li>Sorunların fotoğraflı dokümantasyonu</li>
+                            <li>Gerçek zamanlı durum güncellemeleri</li>
+                            <li>Sorun bazlı önceliklendirme</li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/2 p-4">
+                        <div class="bg-gray-100 rounded-lg p-4 h-48 flex flex-col">
+                            <div class="flex justify-between mb-2">
+                                <div class="text-sm font-medium">Report Issue</div>
+                                <div class="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">Avg. Response: 2hrs</div>
+                            </div>
+                            <select class="border rounded px-2 py-1 mb-2 text-sm">
+                                <option>Select issue type...</option>
+                                <option>Broken Equipment</option>
+                                <option>Plumbing Issue</option>
+                                <option>Electrical Problem</option>
+                            </select>
+                            <textarea class="border rounded px-2 py-1 mb-2 text-sm h-16" placeholder="Describe the issue..."></textarea>
+                            <button class="bg-indigo-600 text-white py-2 px-4 rounded-md mt-auto text-sm">Submit Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- How It Works -->
+        <section id="slide-8" class="slide">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 gradient-text">Uygulama Mimarisi</h2>
+            <div class="relative max-w-4xl w-full h-96 flex items-center justify-center">
+                <!-- Frontend -->
+                <div class="diagram-box absolute top-0 left-0">
+                    <div>User Interface</div>
+                </div>
+                
+                <!-- Backend -->
+                <div class="diagram-box absolute top-0 right-0">
+                    <div>Backend Services</div>
+                </div>
+                
+                <!-- AI Model -->
+                <div class="diagram-box absolute bottom-0 left-0">
+                    <div>AI Models</div>
+                </div>
+                
+                <!-- Database -->
+                <div class="diagram-box absolute bottom-0 right-0">
+                    <div>Database</div>
+                </div>
+                
+                <!-- Central Node -->
+                <div class="diagram-box absolute" style="background: var(--secondary-gradient); color: white;">
+                    <div>CampusVision Core</div>
+                </div>
+                
+                <!-- Arrows -->
+                <div class="arrow absolute" style="top: 50px; left: 180px; width: 120px;"></div>
+                <div class="arrow absolute" style="top: 50px; right: 180px; width: 120px; transform: rotate(180deg);"></div>
+                <div class="arrow absolute" style="bottom: 50px; left: 180px; width: 120px;"></div>
+                <div class="arrow absolute" style="bottom: 50px; right: 180px; width: 120px; transform: rotate(180deg);"></div>
+            </div>
+        </section>
+        
+        <!-- Benefits -->
+        <section id="slide-9" class="slide">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 gradient-text">Sağladığımız Faydalar</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">Öğrenciler İçin</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Hızlıca müsait çalışma alanı bulun</li>
+                        <li>Kayıp eşyalarınızı verimli şekilde geri alın</li>
+                        <li>Çakışma olmadan oda rezervasyonu yapın</li>
+                        <li>Tercih ettiğiniz ses ortamında çalışın</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3 text-purple-600">Personel İçin</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Verimli bakım iş akışları</li>
+                        <li>Daha iyi kaynak tahsisi</li>
+                        <li>Azaltılmış idari yük</li>
+                        <li>Geliştirilmiş kampüs deneyimi</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3 text-indigo-600">Yöneticiler İçin</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Veri odaklı karar verme</li>
+                        <li>Optimize edilmiş alan kullanımı</li>
+                        <li>Azaltılmış operasyonel maliyetler</li>
+                        <li>Geliştirilmiş kampüs güvenliği</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Future Features -->
+        <section id="slide-10" class="slide">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 gradient-text">Gelecek Özellikler</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+                <div class="card bg-gradient-to-br from-blue-50 to-indigo-50">
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.29 7 12 12 20.71 7"></polyline>
+                                <line x1="12" y1="22" x2="12" y2="12"></line>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Eşya-Kişi Eşleştirme</h3>
+                            <p>Gelişmiş güvenlik için sahipsiz eşyaları sahipleriyle eşleştiren yapay zeka sistemi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-gradient-to-br from-purple-50 to-pink-50">
+                    <div class="flex items-start">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                <polyline points="2 17 12 22 22 17"></polyline>
+                                <polyline points="2 12 12 17 22 12"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Doluluk Isı Haritaları</h3>
+                            <p>Daha iyi planlama için kampüs aktivite desenlerinin görsel temsili</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-gradient-to-br from-indigo-50 to-blue-50">
+                    <div class="flex items-start">
+                        <div class="bg-indigo-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600">
+                                <path d="M3 3v18h18"></path>
+                                <path d="m19 9-5 5-4-4-3 3"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Doluluk İstatistikleri</h3>
+                            <p>Tahminsel modelleme ile gelişmiş alan kullanım analitiği</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-gradient-to-br from-blue-50 to-cyan-50">
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Gelişmiş Güvenlik</h3>
+                            <p>Kampüs güvenliği için anomali tespiti ve akıllı izleme</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Farklarımız ve Avantajlarımız -->
+        <section id="slide-11" class="slide">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 gradient-text">Farklarımız ve Avantajlarımız</h2>
+            <div class="max-w-6xl mx-auto">
+                <!-- Farklarımız -->
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Farklarımız</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="card bg-gradient-to-br from-blue-50 to-indigo-50">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Alan Odaklı ve Özelleştirilmiş Yapay Zekâ</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-gradient-to-br from-purple-50 to-pink-50">
+                            <div class="flex items-start">
+                                <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Yerel İhtiyaçlara Uyumlu</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-gradient-to-br from-green-50 to-teal-50">
+                            <div class="flex items-start">
+                                <div class="bg-green-100 p-3 rounded-full mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Kurum İçi Bilgiyle Entegre Çalışma Yeteneği</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-gradient-to-br from-yellow-50 to-orange-50">
+                            <div class="flex items-start">
+                                <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-600">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Modüler ve Genişletilebilir Yapı</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Avantajlarımız -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 text-center">Avantajlarımız</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="card">
+                            <div class="flex items-start">
+                                <div class="text-green-500 mr-3">✅</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Hızlı ve Kolay Uyarlanabilirlik</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="flex items-start">
+                                <div class="text-green-500 mr-3">✅</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Veri Güvenliği ve Gizliliği Üzerindeki Kontrol</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="flex items-start">
+                                <div class="text-green-500 mr-3">✅</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Kullanıcı Dostu Deneyim</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="flex items-start">
+                                <div class="text-green-500 mr-3">✅</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Destek ve Geliştirme Süreçlerinde Esneklik</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Closing -->
+        <section id="slide-13" class="slide gradient-bg">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6">Sistem Tanıtımı</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="aspect-w-16 aspect-h-9 mb-6">
+                    <video class="w-full h-full rounded-lg shadow-lg" controls id="demoVideo">
+                        <source src="ComVisYOLO.mp4" type="video/mp4">
+                        Tarayıcınız video etiketini desteklemiyor.
+                    </video>
+                </div>
+                <p class="text-xl md:text-2xl mb-8 opacity-90 text-center">CampusVision'un gerçek zamanlı nesne tespiti ve doluluk analizi özelliklerini gösteren tanıtım videosu</p>
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-center">
+                    <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg px-6 py-3">
+                        <p class="font-medium">contact@campusvision.edu</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg px-6 py-3">
+                        <p class="font-medium">www.campusvision.edu</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const navDots = document.getElementById('navigation');
+            const progressBar = document.getElementById('progressBar');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            let currentSlide = 0;
+            
+            // Video hızını ayarla
+            const demoVideo = document.getElementById('demoVideo');
+            if (demoVideo) {
+                demoVideo.addEventListener('loadedmetadata', function() {
+                    this.playbackRate = 2.0;
+                });
+            }
+            
+            // Create navigation dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('nav-dot');
+                dot.addEventListener('click', () => goToSlide(index));
+                navDots.appendChild(dot);
+            });
+            
+            // Initialize first slide
+            updateSlides();
+            
+            // Event listeners
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('wheel', handleWheel);
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+            
+            function updateSlides() {
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active');
+                    if (index === currentSlide) {
+                        slide.classList.add('active');
+                    }
+                });
+                
+                // Update navigation dots
+                const dots = document.querySelectorAll('.nav-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.remove('active');
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                    }
+                });
+                
+                // Update progress bar
+                const progress = ((currentSlide + 1) / slides.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Update button states
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === slides.length - 1;
+                
+                // Update URL hash for deep linking
+                window.location.hash = `#slide-${currentSlide + 1}`;
+            }
+            
+            function goToSlide(index) {
+                if (index >= 0 && index < slides.length) {
+                    currentSlide = index;
+                    updateSlides();
+                }
+            }
+            
+            function nextSlide() {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateSlides();
+                }
+            }
+            
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlides();
+                }
+            }
+            
+            function handleKeyDown(e) {
+                if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'PageDown') {
+                    nextSlide();
+                    e.preventDefault();
+                } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                    prevSlide();
+                    e.preventDefault();
+                }
+            }
+            
+            let wheelThrottle = false;
+            function handleWheel(e) {
+                if (wheelThrottle) return;
+                wheelThrottle = true;
+                
+                if (e.deltaY > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+                
+                setTimeout(() => {
+                    wheelThrottle = false;
+                }, 800);
+                
+                e.preventDefault();
+            }
+            
+            // Check for hash in URL to go to specific slide
+            if (window.location.hash) {
+                const slideNum = parseInt(window.location.hash.replace('#slide-', ''));
+                if (!isNaN(slideNum) && slideNum > 0 && slideNum <= slides.length) {
+                    goToSlide(slideNum - 1);
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e20dc846c71dff',t:'MTc0Njk3MDQ2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;" src="./saved_resource.html"></iframe>
+</body></html>
