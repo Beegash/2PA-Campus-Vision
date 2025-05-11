@@ -23,4 +23,17 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login') 
+    return redirect('login')
+
+def profile_view(request):
+    user = request.user
+    print('DEBUG - first_name:', user.first_name)
+    print('DEBUG - last_name:', user.last_name)
+    print('DEBUG - email:', user.email)
+    print('DEBUG - username:', user.username)
+    context = {
+        "full_name_user": f"{user.first_name} {user.last_name}",
+        "email": user.email,
+        "username": user.username,
+    }
+    return render(request, "profile.html", context) 

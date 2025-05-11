@@ -4,6 +4,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 from reservations.models import Reservation
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash, logout
+from django.contrib.auth.password_validation import validate_password
+from django.views.decorators.http import require_POST
 
 def room_reservation(request):
     areas = Area.objects.all()
@@ -27,8 +31,37 @@ def lost_and_found(request):
 def report_issue(request):
     return render(request, 'report_an_issue.html')
 
+@login_required
 def profile(request):
-    return render(request, 'profile.html')
+    user = request.user
+    password_message = None
+
+    if request.method == 'POST':
+        current_password = request.POST.get('currentPassword')
+        new_password = request.POST.get('newPassword')
+        confirm_password = request.POST.get('confirmPassword')
+
+        if not user.check_password(current_password):
+            password_message = "Current password is incorrect."
+        elif new_password != confirm_password:
+            password_message = "New passwords do not match."
+        else:
+            try:
+                validate_password(new_password, user)
+                user.set_password(new_password)
+                user.save()
+                password_message = "Password changed successfully. Please log in again."
+                logout(request)
+            except Exception as e:
+                password_message = str(e)
+
+    context = {
+        "full_name_user": f"{user.first_name} {user.last_name}",
+        "email": user.email,
+        "username": user.username,
+        "password_message": password_message,
+    }
+    return render(request, 'profile.html', context)
 
 @csrf_exempt
 def make_reservation(request):
@@ -54,3 +87,28 @@ def make_reservation(request):
 
 def root_redirect(request):
     return redirect('login')
+
+@require_POST
+@login_required
+def change_password(request):
+    user = request.user
+    current_password = request.POST.get('currentPassword')
+    new_password = request.POST.get('newPassword')
+    confirm_password = request.POST.get('confirmPassword')
+
+    if not user.check_password(current_password):
+        return JsonResponse({'success': False, 'error': 'Mevcut şifre yanlış.'})
+
+    if new_password != confirm_password:
+        return JsonResponse({'success': False, 'error': 'Yeni şifreler eşleşmiyor.'})
+
+    try:
+        validate_password(new_password, user)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+    user.set_password(new_password)
+    user.save()
+    update_session_auth_hash(request, user)
+
+    return JsonResponse({'success': True, 'message': 'Şifre başarıyla değiştirildi.'})

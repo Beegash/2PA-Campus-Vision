@@ -10,6 +10,7 @@ urlpatterns = [
     path('lost-and-found/', views.lost_and_found, name='lost_and_found'),
     path('report-issue/', views.report_issue, name='report_issue'),
     path('reserve/', views.room_reservation, name='room_reservation'),
-    path('make-reservation/', views.make_reservation, name='make_reservation'),  # ✅ Bu satırı ekledik
+    path('make-reservation/', views.make_reservation, name='make_reservation'),
     path('profile/', views.profile, name='profile'),
+    path('change-password/', views.change_password, name='change_password'),
 ]
